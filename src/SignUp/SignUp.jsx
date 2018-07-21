@@ -36,7 +36,7 @@ class SignUp extends Component {
                 <input type="email" placeholder="email" value={this.state.email} onChange={(e) => {this.onChange(e, "email")}} required/>
                 <input type="password" placeholder="password" value={this.state.password} onChange={(e) => {this.onChange(e, "password")}} required/>
                 <input type="password" placeholder="confirm password" value={this.state.confirmPassword} onChange={(e) => {this.onChange(e, "confirmPassword")}} required/>
-                <input type="submit" value="submit"/>
+                <input type="submit" value="submit &#8594;"/>
             </form>
             <a href="./login">already have an account?</a>
         </div>

@@ -66,9 +66,46 @@ body {
   width: 220px;
 }
 
+.sidebar {
+  color: #e3efe7;
+  /* padding-left: 15px; */
+}
+
+.message-section p {
+  margin: 0;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.message-section p:hover {
+  background-color: #2d4e38;
+}
+
+.message-section .add-another {
+  margin-bottom: 5px;
+  margin-top: 40px;
+}
+
+.message-section p, .message-section .add-another, .sidebar .username {
+  padding-left: 15px;
+}
+
+
+
+.selected-message {
+  background-color: #d25235;
+}
+
 .messages-width {
   display: inline-block;
+  position: absolute;
+  top: 0;
 }
+
+
+
+
+
 
 html, body, #root, .App, .main, .sidebar-width, .messages-width{
   height: 100%

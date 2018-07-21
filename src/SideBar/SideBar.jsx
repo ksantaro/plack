@@ -17,9 +17,32 @@ class SideBar extends Component {
   }
 
   render() {
+    var channels = this.props.channels.map((channel) => 
+      <p># {channel.name}</p> 
+    )
+    var directMessages = this.props.directMessages.map((dmessage) =>
+      <p>&#8226; {dmessage.name}</p>
+    )
     return (
-      <div>
-        SideBar
+      <div className="sidebar">
+        <div className="username">
+          Kenneth Santarosa
+          ksantaro@uci.edu
+        </div>
+        <div className="message-section">
+          <div className="add-another">
+            Channels
+            <span> +</span>
+          </div>
+          {channels}
+        </div>
+        <div className="message-section">
+          <div className="add-another">
+              Direct Messages
+              <span> +</span>
+            </div>
+            {directMessages}
+        </div>
       </div>
     );
   }
