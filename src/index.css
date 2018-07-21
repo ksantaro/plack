@@ -55,3 +55,21 @@ body {
   margin-left: 25px;
   color: white;
 }
+
+.main {
+  text-align: left;
+}
+
+.sidebar-width {
+  display: inline-block;
+  background-color: #4f8054;
+  width: 220px;
+}
+
+.messages-width {
+  display: inline-block;
+}
+
+html, body, #root, .App, .main, .sidebar-width, .messages-width{
+  height: 100%
+}

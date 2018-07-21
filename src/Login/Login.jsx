@@ -23,8 +23,9 @@ class Login extends Component {
         <Topbar/>    
         <div className="form-block">
             <h2>Login</h2>
+            <p>Enter your email address and password</p>
             <form action="">
-                <input type="email" placeholder="email" value={this.state.email} onChange={(e) => {this.onChange(e, "email")}} required/>
+                <input type="email" placeholder="address@email.com" value={this.state.email} onChange={(e) => {this.onChange(e, "email")}} required/>
                 <input type="password" placeholder="password" value={this.state.password} onChange={(e) => {this.onChange(e, "password")}} required/>
                 <input type="submit" value="submit"/>
             </form>

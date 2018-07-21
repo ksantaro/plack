@@ -7,6 +7,8 @@ class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
+        firstName: '',
+        lastName: '',
         username: '',
         email: '',
         password: '',
@@ -26,7 +28,10 @@ class SignUp extends Component {
         <Topbar/>
         <div className="form-block">
             <h2>Sign Up</h2>
+            <p>Enter your first name, last name, username, email address, and password</p>
             <form action="">
+                <input type="text" placeholder="first name" value={this.state.firstName} onChange={(e) => {this.onChange(e, "firstName")}} required/>
+                <input type="text" placeholder="last name" value={this.state.lastName} onChange={(e) => {this.onChange(e, "lastName")}} required/>
                 <input type="text" placeholder="username" value={this.state.username} onChange={(e) => {this.onChange(e, "username")}} required/>
                 <input type="email" placeholder="email" value={this.state.email} onChange={(e) => {this.onChange(e, "email")}} required/>
                 <input type="password" placeholder="password" value={this.state.password} onChange={(e) => {this.onChange(e, "password")}} required/>

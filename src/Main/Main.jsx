@@ -20,9 +20,13 @@ class Main extends Component {
 
   render() {
     return (
-      <div>
-        <SideBar/>
-        <Messages /> {/* props: channel */}
+      <div className="main">
+        <div className="sidebar-width">
+          <SideBar/>
+        </div>
+        <div className="messages-width">
+          <Messages /> {/* props: channel */}
+        </div>
       </div>
     );
   }
