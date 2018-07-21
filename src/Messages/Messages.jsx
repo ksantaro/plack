@@ -17,9 +17,29 @@ class Messages extends Component {
   }
 
   render() {
+
+    console.log(this.props[this.props.messageType + 's'][this.props.messagesID])
+    var messages = this.props[this.props.messageType + 's'][this.props.messagesID]
+    var messages = this.props[this.props.messageType + 's'][this.props.messagesID] 
+    console.log(messages);
+    var messageTitle = messages['name'];
+    var messagesList = messages.messages.map((message) => 
+      <div>
+        {message.username}
+        {message.date}
+        {message.text}
+      </div>
+    );
+    
     return (
       <div>
-        Messages
+        <div className="messages-title">
+          {messageTitle}
+        </div>
+        <div className="messages-block">
+          {messagesList}
+          <input type="text" />
+        </div>
       </div>
     );
   }

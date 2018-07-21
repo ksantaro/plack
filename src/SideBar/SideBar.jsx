@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+var selectedMessageStyle = {backgroundColor: "#d25235"}
 
 class SideBar extends Component {
   constructor(props) {
@@ -18,10 +19,14 @@ class SideBar extends Component {
 
   render() {
     var channels = this.props.channels.map((channel) => 
-      <p># {channel.name}</p> 
+      <p style={(this.props.messagesID == channel.chid && this.props.messageType == "channel" ? selectedMessageStyle : {})} 
+        onClick={(e) => {this.props.onClick(e, channel.chid, "channel")}} >
+        # {channel.name}</p> 
     )
     var directMessages = this.props.directMessages.map((dmessage) =>
-      <p>&#8226; {dmessage.name}</p>
+      <p style={(this.props.messagesID == dmessage.uid && this.props.messageType == "directMessage" ? selectedMessageStyle : {})}
+        onClick={(e) => {this.props.onClick(e, dmessage.uid, "directMessage")} }>
+      &#8226; {dmessage.name}</p>
     )
     return (
       <div className="sidebar">

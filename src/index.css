@@ -84,6 +84,17 @@ body {
 .message-section .add-another {
   margin-bottom: 5px;
   margin-top: 40px;
+  position: relative;
+}
+
+.message-section .add-another span {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
+
+.sidebar .username {
+  padding-top: 15px;
 }
 
 .message-section p, .message-section .add-another, .sidebar .username {
@@ -92,16 +103,20 @@ body {
 
 
 
-.selected-message {
-  background-color: #d25235;
-}
+
+
 
 .messages-width {
   display: inline-block;
   position: absolute;
   top: 0;
+  width: 100%;
 }
 
+.messages-block {
+  position: absolute;
+  bottom: 35px;
+}
 
 
 

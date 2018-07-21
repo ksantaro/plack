@@ -38,7 +38,7 @@ var channels = [
 ]
 
 var directMessages = [
-  { uid: 100, // This person's id
+  { uid: 0, // This person's id
     name: 'me',
     messages: [{
       text: "Hello and thank you for joining plack! you may use this space for any note taking while you look around.",
@@ -47,7 +47,7 @@ var directMessages = [
     }
     ]
   },
-  { uid: 0, // The other persons ID
+  { uid: 1, // The other persons ID
     name: 'Carl', // The other person in the convo
     messages: [{
       text: "What do you think of the new plan?",
@@ -59,7 +59,7 @@ var directMessages = [
       username: "kenny" //person who sent message
     }]
   },
-  { uid: 1,
+  { uid: 2,
     name: 'lenny', // The other person in the convo
     messages: [{
       text: "What do you think of the new plan?",
@@ -79,7 +79,7 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        messages: 100, // starts with the current users UID
+        messagesID: 0, // starts with the current users UID
         messageType: "directMessage" // directMessage or channel
     }
   }
@@ -90,6 +90,13 @@ class Main extends Component {
     })
   }
 
+  onClick = (e, id, type) => { // type (directMessage or channel)
+    this.setState({
+      messagesID: id,
+      messageType: type,
+    });
+  }
+
   render() {
     return (
       <div className="main">
@@ -97,12 +104,17 @@ class Main extends Component {
           <SideBar 
             channels={channels}
             directMessages={directMessages}
+            onClick={this.onClick}
+            messagesID={this.state.messagesID}
+            messageType={this.state.messageType}
           />
         </div>
         <div className="messages-width">
           <Messages 
             channels={channels}
             directMessages={directMessages}
+            messagesID={this.state.messagesID}
+            messageType={this.state.messageType}
           /> {/* props: channel */}
         </div>
       </div>
