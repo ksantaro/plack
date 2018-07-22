@@ -22,14 +22,18 @@ class Messages extends Component {
     var messages = this.props[this.props.messageType + 's'][this.props.messagesID]
     var messages = this.props[this.props.messageType + 's'][this.props.messagesID] 
     console.log(messages);
-    var messageTitle = messages['name'];
-    var messagesList = messages.messages.map((message) => 
-      <div>
-        {message.username}
-        {message.date}
-        {message.text}
-      </div>
-    );
+    var messageTitle;
+    var messagesList;
+    if (messages) {
+      messageTitle = messages['name'];
+      messagesList = messages.messages.map((message) => 
+        <div>
+          {message.username}
+          {message.date}
+          {message.text}
+        </div>
+      );
+    }
     
     return (
       <div>

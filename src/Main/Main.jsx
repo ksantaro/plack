@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import SideBar from '../SideBar/SideBar';
 import Messages from '../Messages/Messages';
+import Modal from '../Modal/Modal';
 
 // if chid == uid get all channels
-var channels = [
+var Xchannels = [
   { chid: 0,
     name: 'business-plan',  
     messages: [ {
@@ -37,7 +38,7 @@ var channels = [
   },
 ]
 
-var directMessages = [
+var XdirectMessages = [
   { uid: 0, // This person's id
     name: 'me',
     messages: [{
@@ -80,8 +81,22 @@ class Main extends Component {
     super(props);
     this.state = {
         messagesID: 0, // starts with the current users UID
-        messageType: "directMessage" // directMessage or channel
-    }
+        messageType: "directMessage", // directMessage or channel
+        newDirectMessageModalOpen: false,
+        newChannelModalOpen: false,
+        channels : [],
+        directMessages : [],
+      }
+    // this.state.channels = Xchannels;
+    // this.state.directMessages = XdirectMessages;
+    
+  }
+
+  componentDidMount = () => {
+    this.setState({
+      channels: Xchannels,
+      directMessages: XdirectMessages,
+    });
   }
 
   onChange = (e, valueName) => {
@@ -97,22 +112,44 @@ class Main extends Component {
     });
   }
 
+  toggleModal = (e, modalName) => {
+    this.setState({
+      [modalName]: !this.state[modalName] 
+    });
+  }
+
+  addNewMessage = (e, isDirectMessage) => { // event, bool
+    if(isDirectMessage) {
+
+    } else {}
+  }
+
   render() {
     return (
       <div className="main">
         <div className="sidebar-width">
+          <Modal 
+            createType="channel"
+          />
+          <Modal
+            createType="directMessage"
+          />
           <SideBar 
-            channels={channels}
-            directMessages={directMessages}
+            channels={this.state.channels}
+            directMessages={this.state.directMessages}
             onClick={this.onClick}
             messagesID={this.state.messagesID}
             messageType={this.state.messageType}
+            newDirectMessageModalOpen={this.state.newDirectMessageModalOpen}
+            newChannelModalOpen={this.state.newChannelModalOpen}
+            toggleModal={this.toggleModal}
+            
           />
         </div>
         <div className="messages-width">
           <Messages 
-            channels={channels}
-            directMessages={directMessages}
+            channels={this.state.channels}
+            directMessages={this.state.directMessages}
             messagesID={this.state.messagesID}
             messageType={this.state.messageType}
           /> {/* props: channel */}

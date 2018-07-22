@@ -17,6 +17,12 @@ class SideBar extends Component {
     })
   }
 
+  openModal = (e, modalName) => {
+    if (this.props[modalName] != true) {
+      this.props.toggleModal(e, modalName);
+    }
+  }
+
   render() {
     var channels = this.props.channels.map((channel) => 
       <p style={(this.props.messagesID == channel.chid && this.props.messageType == "channel" ? selectedMessageStyle : {})} 
