@@ -5,8 +5,7 @@ class Messages extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        email: '',
-        password: '',
+        messageInput: "",
     }
   }
 
@@ -14,6 +13,10 @@ class Messages extends Component {
     this.setState({
         [valueName]: e.target.value 
     })
+  }
+
+  onSubmit = (e) => { //this.props.messageType / this.props.messagesID
+    e.preventDefault();
   }
 
   render() {
@@ -27,10 +30,10 @@ class Messages extends Component {
     if (messages) {
       messageTitle = messages['name'];
       messagesList = messages.messages.map((message) => 
-        <div>
-          {message.username}
-          {message.date}
-          {message.text}
+        <div className="message-block">
+          <span className="message-username">{message.username} </span>
+          <span className="message-date">{message.date} </span>
+          <p className="message-content">{message.text}</p>
         </div>
       );
     }
@@ -42,7 +45,11 @@ class Messages extends Component {
         </div>
         <div className="messages-block">
           {messagesList}
-          <input type="text" />
+          <form onSubmit={this.onSubmit}>
+            <input type="text" onChange={(e) => {this.onChange(e, "messageInput")}}/>
+            <input type="submit" value="submit"/>
+
+          </form>
         </div>
       </div>
     );
