@@ -128,12 +128,18 @@ class Main extends Component {
     return (
       <div className="main">
         <div className="sidebar-width">
-          <Modal 
-            createType="channel"
-          />
-          <Modal
-            createType="directMessage"
-          />
+          {
+            this.state.newChannelModalOpen && 
+            <Modal 
+              createType="channel"
+            />
+          }
+          {
+            this.state.newDirectMessageModalOpen &&
+            <Modal
+              createType="directMessage"
+            />
+          }
           <SideBar 
             channels={this.state.channels}
             directMessages={this.state.directMessages}

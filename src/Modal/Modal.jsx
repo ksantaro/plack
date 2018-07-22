@@ -16,11 +16,19 @@ class Modal extends Component {
     })
   }
 
+  onSubmit = (e) => {
+    e.preventDefault();
+  }
+
   render() {
     return (
       <div className="modal-container">
-        { this.props.createType == "channel" && <input type="text" value={}/>}
-        { this.props.createType == "directMessage" && <input type="text" value={} />}
+        <form action="">
+            { this.props.createType == "channel" && <input type="text" value={channelName} onChange={(e) => {this.onChange(e, "channelName")}} />}
+            { this.props.createType == "directMessage" && <input type="text" value={directMessageName} onChange={(e) => {this.onChange(e, "directMessageName")}} />}
+            <input type="submit" onSubmit={this.onSubmit}/>
+        </form>
+
       </div>
     );
   }
