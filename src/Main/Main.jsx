@@ -71,7 +71,7 @@ var XdirectMessages = [
       date: "07/19/18 12:50pm",
       username: "kenny" //person who sent message
     }]
-  }
+  }  
 ];
 
 
