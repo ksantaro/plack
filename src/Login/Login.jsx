@@ -28,10 +28,10 @@ class Login extends Component {
         <div className="form-block">
             <h2>Login</h2>
             <p>Enter your email address and password</p>
-            <form action="">
+            <form action="" onSubmit={this.onSubmit}>
                 <input type="email" placeholder="address@email.com" value={this.state.email} onChange={(e) => {this.onChange(e, "email")}} required/>
                 <input type="password" placeholder="password" value={this.state.password} onChange={(e) => {this.onChange(e, "password")}} required/>
-                <input type="submit" value="submit &#8594;" onSubmit={this.onSubmit}/>
+                <input type="submit" value="submit &#8594;" />
             </form>
             <a href="./sign-up">don't have an account?</a>
         </div>

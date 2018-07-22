@@ -43,14 +43,14 @@ class SideBar extends Component {
         <div className="message-section">
           <div className="add-another">
             Channels
-            <span> +</span>
+            <span onClick={(e) => {this.openModal(e, "newChannelModalOpen")}} > +</span>
           </div>
           {channels}
         </div>
         <div className="message-section">
           <div className="add-another">
               Direct Messages
-              <span> +</span>
+              <span onClick={(e) => {this.openModal(e, "newDirectMessageModalOpen")}}> +</span>
             </div>
             {directMessages}
         </div>

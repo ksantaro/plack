@@ -132,12 +132,14 @@ class Main extends Component {
             this.state.newChannelModalOpen && 
             <Modal 
               createType="channel"
+              toggleModal={this.toggleModal}
             />
           }
           {
             this.state.newDirectMessageModalOpen &&
             <Modal
               createType="directMessage"
+              toggleModal={this.toggleModal}
             />
           }
           <SideBar 

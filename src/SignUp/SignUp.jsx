@@ -33,14 +33,14 @@ class SignUp extends Component {
         <div className="form-block">
             <h2>Sign Up</h2>
             <p>Enter your first name, last name, username, email address, and password</p>
-            <form action="">
+            <form action="" onSubmit={this.onSubmit}>
                 <input type="text" placeholder="first name" value={this.state.firstName} onChange={(e) => {this.onChange(e, "firstName")}} required/>
                 <input type="text" placeholder="last name" value={this.state.lastName} onChange={(e) => {this.onChange(e, "lastName")}} required/>
                 <input type="text" placeholder="username" value={this.state.username} onChange={(e) => {this.onChange(e, "username")}} required/>
                 <input type="email" placeholder="email" value={this.state.email} onChange={(e) => {this.onChange(e, "email")}} required/>
                 <input type="password" placeholder="password" value={this.state.password} onChange={(e) => {this.onChange(e, "password")}} required/>
                 <input type="password" placeholder="confirm password" value={this.state.confirmPassword} onChange={(e) => {this.onChange(e, "confirmPassword")}} required/>
-                <input type="submit" value="submit &#8594;" onSubmit={this.onSubmit}/>
+                <input type="submit" value="submit &#8594;" />
             </form>
             <a href="./login">already have an account?</a>
         </div>
