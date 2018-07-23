@@ -217,7 +217,7 @@ input {
   font-size: 30px;
 }
 
-.modal-container input[type="text"] {
+.modal-container input[type="text"], .modal-container input[type="email"] {
   margin: 12px 10px;
   width: 85%;
   font-size: 22px;

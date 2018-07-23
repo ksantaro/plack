@@ -133,6 +133,10 @@ class Main extends Component {
             <Modal 
               createType="channel"
               toggleModal={this.toggleModal}
+              //messageType={this.props.messageType}
+              channels={this.state.channels}
+              directMessages={this.state.directMessages}
+
             />
           }
           {
@@ -140,6 +144,10 @@ class Main extends Component {
             <Modal
               createType="directMessage"
               toggleModal={this.toggleModal}
+              //messageType={this.props.messageType}
+              directMessages={this.state.directMessages}
+              channels={this.state.channels}
+
             />
           }
           <SideBar 
