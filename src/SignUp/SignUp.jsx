@@ -34,6 +34,9 @@ class SignUp extends Component {
         email: this.state.email,
         password: this.state.password,
       },
+    }).then(function(res) {
+        console.log("THEN");
+        window.location.href = "http://localhost:3000/login"
     });
 
   }
