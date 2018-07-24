@@ -99,14 +99,13 @@ class Main extends Component {
       directMessages: XdirectMessages,
     });
 
-  
-    axios.post('http://localhost:3010/users/session', {
-      //just to check if session exists
-      data: {},
-      withCredentials: true,
-    }).then(function (response) {
-      console.log(response);
-    });
+    if (sessionStorage.length != 0) {
+      let user = JSON.parse(sessionStorage.getItem('user'));
+      console.log(user);
+      // TODO get channels/directmessages
+    } else {
+      window.location.href = "http://localhost:3000/login"
+    }
   }
 
   onChange = (e, valueName) => {

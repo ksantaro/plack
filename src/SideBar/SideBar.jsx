@@ -23,6 +23,11 @@ class SideBar extends Component {
     }
   }
 
+  signOut = (e) => {
+    sessionStorage.removeItem('user');
+    window.location.href = "http://localhost:3000/login"
+  }
+
   render() {
     var channels = this.props.channels.map((channel) => 
       <p style={(this.props.messagesID == channel.chid && this.props.messageType == "channel" ? selectedMessageStyle : {})} 
@@ -36,6 +41,9 @@ class SideBar extends Component {
     )
     return (
       <div className="sidebar">
+        <div onClick={this.signOut}>
+          Sign Out
+        </div>
         <div className="username">
           Kenneth Santarosa
           ksantaro@uci.edu

@@ -26,19 +26,8 @@ class SignUp extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    // axios({
-    //   method: 'post',
-    //   url: 'http://localhost:3010/users/register',
-    //   data: {
-    //     first_name: this.state.firstName,
-    //     last_name: this.state.lastName,
-    //     username: this.state.username,
-    //     email: this.state.email,
-    //     password: this.state.password,
-    //   }
-    // });
     axios.post('http://localhost:3010/users/register', {
-      body: {
+      data: {
         first_name: this.state.firstName,
         last_name: this.state.lastName,
         username: this.state.username,

@@ -21,18 +21,22 @@ class Login extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     axios.post('http://localhost:3010/users/login', {
-        body: {
+        data: {
           email: this.state.email,
           password: this.state.password
-        },
-        withCredentials: true
-      
-    }).then(function(res) {
-      console.log(res);
+        }      
+    })
+    .then(function(res) {
+      let user = JSON.stringify(res.data); // Eventually would be replaced by Redux-Persits
+      sessionStorage.setItem('user', user);
+        let s = sessionStorage.getItem('user');
+      window.location.href = "http://localhost:3000/main"
+
     });
   }
 
   render() {
+    
     return (
       <div>
         <Topbar/>    

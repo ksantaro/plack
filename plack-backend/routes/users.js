@@ -10,7 +10,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-  // console.log(req.body.data);
   const data = req.body.data;
   const loginQuery = {
     text: 'SELECT * FROM users WHERE email = $1',
@@ -18,6 +17,7 @@ router.post('/login', function(req, res, next) {
   }
 
   currentClient.query(loginQuery, (err, result) => {
+    
     if (err) {
       console.log(err);
     } else {
@@ -25,15 +25,9 @@ router.post('/login', function(req, res, next) {
         console.log('user does not exist');
       } else {
         if (data.password == result.rows[0].password) { //if passwords match set session
-          console.log(result.rows[0]);
           req.session.user = result.rows[0];
-          // req.session.save();
-
-          res.send(req.session.user);
-
-          // console.log(req.session);
-          console.log("user succesfully logged in")
-          //res("success");
+          res.json(req.session.user);
+          // console.log("user succesfully logged in")
         }
       }
     }
@@ -42,8 +36,7 @@ router.post('/login', function(req, res, next) {
 
 router.post('/session', function(req,res) {
   if (req.session) {
-    console.log(req.session.user);
-    res.send(req.session);
+    res.json(req.session);
   }
 });
 
