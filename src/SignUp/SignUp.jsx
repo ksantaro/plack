@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './SignUp.css';
 import Topbar from '../Topbar/Topbar';
+
 
 
 class SignUp extends Component {
@@ -18,12 +20,33 @@ class SignUp extends Component {
 
   onChange = (e, valueName) => {
     this.setState({
-        [valueName]: e.target.value 
+        [valueName]: e.target.value
     })
   }
 
   onSubmit = (e) => {
     e.preventDefault();
+    // axios({
+    //   method: 'post',
+    //   url: 'http://localhost:3010/users/register',
+    //   data: {
+    //     first_name: this.state.firstName,
+    //     last_name: this.state.lastName,
+    //     username: this.state.username,
+    //     email: this.state.email,
+    //     password: this.state.password,
+    //   }
+    // });
+    axios.post('http://localhost:3010/users/register', {
+      data: {
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+        username: this.state.username,
+        email: this.state.email,
+        password: this.state.password,
+      }
+    });
+
   }
 
   render() {

@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/plack-backend/node_modules
 
 # testing
 /coverage
