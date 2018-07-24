@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import Topbar from '../Topbar/Topbar';
 
 
@@ -19,6 +20,16 @@ class Login extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+    axios.post('http://localhost:3010/users/login', {
+        body: {
+          email: this.state.email,
+          password: this.state.password
+        },
+        withCredentials: true
+      
+    }).then(function(res) {
+      console.log(res);
+    });
   }
 
   render() {

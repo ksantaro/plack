@@ -9,19 +9,42 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/login', function(req, res, next) {
+router.post('/login', function(req, res, next) {
+  // console.log(req.body.data);
   const data = req.body.data;
   const loginQuery = {
     text: 'SELECT * FROM users WHERE email = $1',
     values: [data.email]
   }
+
   currentClient.query(loginQuery, (err, result) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(results);
+      if(result.rows.length == 0) { //if user does not exist
+        console.log('user does not exist');
+      } else {
+        if (data.password == result.rows[0].password) { //if passwords match set session
+          console.log(result.rows[0]);
+          req.session.user = result.rows[0];
+          // req.session.save();
+
+          res.send(req.session.user);
+
+          // console.log(req.session);
+          console.log("user succesfully logged in")
+          //res("success");
+        }
+      }
     }
   });
+});
+
+router.post('/session', function(req,res) {
+  if (req.session) {
+    console.log(req.session.user);
+    res.send(req.session);
+  }
 });
 
 router.post('/register', function(req,res) {
@@ -39,8 +62,6 @@ router.post('/register', function(req,res) {
   });
 });
 
-router.get('/login', function(req,res) {
 
-});
 
 module.exports = router;

@@ -38,13 +38,13 @@ class SignUp extends Component {
     //   }
     // });
     axios.post('http://localhost:3010/users/register', {
-      data: {
+      body: {
         first_name: this.state.firstName,
         last_name: this.state.lastName,
         username: this.state.username,
         email: this.state.email,
         password: this.state.password,
-      }
+      },
     });
 
   }

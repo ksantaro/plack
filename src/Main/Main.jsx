@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import SideBar from '../SideBar/SideBar';
 import Messages from '../Messages/Messages';
 import Modal from '../Modal/Modal';
@@ -97,6 +98,15 @@ class Main extends Component {
       channels: Xchannels,
       directMessages: XdirectMessages,
     });
+
+  
+    axios.post('http://localhost:3010/users/session', {
+      //just to check if session exists
+      data: {},
+      withCredentials: true,
+    }).then(function (response) {
+      console.log(response);
+    });
   }
 
   onChange = (e, valueName) => {
@@ -125,6 +135,7 @@ class Main extends Component {
   }
 
   render() {
+    
     return (
       <div className="main">
         <div className="sidebar-width">
