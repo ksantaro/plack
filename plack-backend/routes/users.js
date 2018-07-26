@@ -51,7 +51,33 @@ router.post('/register', function(req,res) {
       console.log(err);
     } else {
       console.log(result);
-      res.send(result);
+      // res.send(result);
+      let userID = result.rows[0].uid;
+      const addSelfFriend = {
+        text: 'INSERT INTO friends(uid1, uid2) VALUES($1, $1) RETURNING *',
+        values: [userID]
+      }
+      currentClient.query(addSelfFriend, (err2, result2) => {
+        if (err2) {
+          console.log(err2);
+        } else {
+          console.log(result2);
+          let userFriendID = result2.rows[0].ufid;
+          let welcomeMessage = "Hello and welcome to plack! Please use this space to take any notes";
+          const startMessage = {
+            text: 'INSERT INTO direct_messages(ufid, text, senderid) VALUES($1, $2, $3) RETURNING *',
+            values: [userFriendID, welcomeMessage, userID] // own id will be used for notes
+          }
+          currentClient.query(startMessage, (err3, result3) => {
+            if (err3) {
+              console.log(err3);
+            } else {
+              console.log(result3);
+              res.send(result3);
+            }
+          });
+        }
+      });
     }
   });
 });
