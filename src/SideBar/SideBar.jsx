@@ -29,24 +29,37 @@ class SideBar extends Component {
   }
 
   render() {
-    var channels = this.props.channels.map((channel) => 
-      <p style={(this.props.messagesID == channel.chid && this.props.messageType == "channel" ? selectedMessageStyle : {})} 
+    // var channels = this.props.channels.map((channel) => 
+    //   <p style={(this.props.messagesID == channel.chid && this.props.messageType == "channel" ? selectedMessageStyle : {})} 
+    //     onClick={(e) => {this.props.onClick(e, channel.chid, "channel")}} >
+    //     # {channel.name}</p> 
+    // )
+    var channels = Object.keys(this.props.channels).map((channelKey) => {
+      let channel = this.props.channels[channelKey];
+      return( <p style={(this.props.messagesID == channel.chid && this.props.messageType == "channel" ? selectedMessageStyle : {})} 
         onClick={(e) => {this.props.onClick(e, channel.chid, "channel")}} >
-        # {channel.name}</p> 
-    )
-    var directMessages = this.props.directMessages.map((dmessage) =>
-      <p style={(this.props.messagesID == dmessage.uid && this.props.messageType == "directMessage" ? selectedMessageStyle : {})}
+        # {channel.name}</p> )
+    })
+    // var directMessages = this.props.directMessages.map((dmessage) =>
+    //   <p style={(this.props.messagesID == dmessage.uid && this.props.messageType == "directMessage" ? selectedMessageStyle : {})}
+    //     onClick={(e) => {this.props.onClick(e, dmessage.uid, "directMessage")} }>
+    //   &#8226; {dmessage.name}</p>
+    // )
+    // let keys =[ ...myMap.keys() ];
+    var directMessages = Object.keys(this.props.directMessages).map((directMessageKey) => {
+      let dmessage = this.props.directMessages[directMessageKey];
+      return (<p style={(this.props.messagesID == dmessage.uid && this.props.messageType == "directMessage" ? selectedMessageStyle : {})}
         onClick={(e) => {this.props.onClick(e, dmessage.uid, "directMessage")} }>
-      &#8226; {dmessage.name}</p>
-    )
+        &#8226; {dmessage.name}</p>)
+    })
     return (
       <div className="sidebar">
         <div onClick={this.signOut}>
           Sign Out
         </div>
         <div className="username">
-          Kenneth Santarosa
-          ksantaro@uci.edu
+          <span className="name">{this.props.user.first_name} {this.props.user.last_name}</span>
+          <span className="email">{this.props.user.email}</span>
         </div>
         <div className="message-section">
           <div className="add-another">

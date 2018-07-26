@@ -101,6 +101,10 @@ input {
   padding-top: 15px;
 }
 
+.sidebar .username .email {
+  display: block;
+}
+
 .message-section p, .message-section .add-another, .sidebar .username {
   padding-left: 15px;
 }

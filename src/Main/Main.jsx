@@ -39,6 +39,19 @@ var Xchannels = [
   },
 ]
 
+var X2directMessages = {
+  2 : { 
+    uid: 2, // This person's id
+    name: 'me',
+    messages: [{
+      text: "Hello and thank you for joining plack! you may use this space for any note taking while you look around.",
+      date: "07/21/18 10:00am",
+      username: "plack"
+    }
+    ]
+}
+}
+
 var XdirectMessages = [
   { uid: 0, // This person's id
     name: 'me',
@@ -85,8 +98,9 @@ class Main extends Component {
         messageType: "directMessage", // directMessage or channel
         newDirectMessageModalOpen: false,
         newChannelModalOpen: false,
-        channels : [],
-        directMessages : [],
+        channels: {},
+        directMessages: {},
+        user: {},
       }
     // this.state.channels = Xchannels;
     // this.state.directMessages = XdirectMessages;
@@ -95,13 +109,30 @@ class Main extends Component {
 
   componentDidMount = () => {
     this.setState({
-      channels: Xchannels,
-      directMessages: XdirectMessages,
+      // channels: Xchannels,
+      // directMessages: XdirectMessages,
     });
 
     if (sessionStorage.length != 0) {
       let user = JSON.parse(sessionStorage.getItem('user'));
-      console.log(user);
+      console.log(user);  
+      // axios.post('http://localhost:3010/users/', {
+      //   data: {
+      //     email: this.state.email,
+      //     password: this.state.password
+      //   }      
+      // }).then(function(response) {
+      //   console.log(response);
+      // });
+      this.setState({
+        user: user,
+        messagesID: user.uid,
+        directMessages: X2directMessages,
+      });
+      axios.get(`http://localhost:3010/main/all/${user.uid}`, {
+      }).then(function(response) {
+        console.log(response);
+      })
       // TODO get channels/directmessages
     } else {
       window.location.href = "http://localhost:3000/login"
@@ -169,7 +200,7 @@ class Main extends Component {
             newDirectMessageModalOpen={this.state.newDirectMessageModalOpen}
             newChannelModalOpen={this.state.newChannelModalOpen}
             toggleModal={this.toggleModal}
-            
+            user={this.state.user}
           />
         </div>
         <div className="messages-width">
