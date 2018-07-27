@@ -95,10 +95,11 @@ class Main extends Component {
     super(props);
     this.state = {
         index: 0, // starts with the current users UID
+        messageID: 0, // starts with own id ufid or chid
         messageType: "directMessage", // directMessage or channel
         newDirectMessageModalOpen: false,
         newChannelModalOpen: false,
-        channels: {},
+        channels: [],
         directMessages: [],
         user: {},
       }
@@ -127,12 +128,16 @@ class Main extends Component {
       
       axios.get(`http://localhost:3010/main/all/${user.uid}`, {
       }).then((response) => {
-        console.log(response.data);
-        const directMessages = response.data;
+        const channelMessages = JSON.parse(response.data.channel_messages);
+        const directMessages = JSON.parse(response.data.direct_messages);
+        console.log(directMessages);
+        console.log(channelMessages)
         this.setState({
           user: user,
           index: 0,
           directMessages: directMessages,
+          channels: channelMessages,
+          messageID: directMessages[0].ufid, // set to  own ufid
         });
       })
       // TODO get channels/directmessages
@@ -147,10 +152,11 @@ class Main extends Component {
     })
   }
 
-  onClick = (e, index, type) => { // type (directMessage or channel)
+  onClick = (e, index, messageID, type) => { // type (directMessage or channel)
     this.setState({
       index: index,
       messageType: type,
+      messageID: messageID,
     });
   }
 
@@ -211,6 +217,8 @@ class Main extends Component {
             directMessages={this.state.directMessages}
             index={this.state.index}
             messageType={this.state.messageType}
+            messageID={this.state.messageID}
+            user={this.state.user}
           /> {/* props: channel */}
         </div>
       </div>

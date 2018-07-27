@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class Messages extends Component {
   constructor(props) {
@@ -25,18 +26,32 @@ class Messages extends Component {
   onSubmit = (e) => { //this.props.messageType / this.props.index
     e.preventDefault();
     if (this.props.messageType == "channel") {
-      console.log(this.props.channels[this.props.index].messages);
-      this.props.channels[this.props.index].messages.push({
-        text: this.state.messageInput,
-        date: this.getDate(),
-        username: "kenny",
-      });
+      // console.log(this.props.channels[this.props.index].messages);
+      // this.props.channels[this.props.index].messages.push({
+      //   text: this.state.messageInput,
+      //   date: this.getDate(),
+      //   username: "kenny",
+      // });
+      axios.post('http://localhost:3010/main/channel/message', {
+            data: {
+                senderID: this.props.user.uid,
+                chid: this.props.messageID,
+                text: this.state.messageInput
+            }
+        });
     } else {
-      this.props.directMessages[this.props.index].messages.push({
-        text: this.state.messageInput,
-        date: this.getDate(),
-        username: "kenny",
-      });
+      // this.props.directMessages[this.props.index].messages.push({
+      //   text: this.state.messageInput,
+      //   date: this.getDate(),
+      //   username: "kenny",
+      // });
+      axios.post('http://localhost:3010/main/friend/message', {
+            data: {
+                senderID: this.props.user.uid,
+                ufid: this.props.messageID,
+                text: this.state.messageInput
+            }
+        });
     }
 
     this.setState({
@@ -49,12 +64,11 @@ class Messages extends Component {
     // console.log(this.props[this.props.messageType + 's'][this.props.index])
     var messages = this.props[this.props.messageType + 's'][this.props.index]
     // var messages = this.props[this.props.messageType + 's'][this.props.index] 
-    console.log(this.props[this.props.messageType + 's'][this.props.index]);
     var messageTitle;
     var messagesList;
     if (messages) {
       messageTitle = messages['name'];
-      messagesList = messages.direct_messages.map((message) => 
+      messagesList = messages.messages.map((message) => 
         <div className="message-block">
           <span className="message-username">{message.senderUsername} </span>
           <span className="message-date">{message.date} </span>

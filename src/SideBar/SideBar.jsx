@@ -37,12 +37,12 @@ class SideBar extends Component {
     var channels = Object.keys(this.props.channels).map((channelKey, index) => {
       let channel = this.props.channels[channelKey];
       return( <p style={(this.props.index == index && this.props.messageType == "channel" ? selectedMessageStyle : {})} 
-        onClick={(e) => {this.props.onClick(e, channel.chid, "channel")}} >
+        onClick={(e) => {this.props.onClick(e, index, channel.chid, "channel")}} >
         # {channel.name}</p> )
     })
     var directMessages = this.props.directMessages.map((dmessage, index) =>
       <p style={(this.props.index == index && this.props.messageType == "directMessage" ? selectedMessageStyle : {})}
-        onClick={(e) => {this.props.onClick(e, index, "directMessage")} }>
+        onClick={(e) => {this.props.onClick(e, index, dmessage.ufid, "directMessage")} }>
       &#8226; {dmessage.name}</p>
     )
 

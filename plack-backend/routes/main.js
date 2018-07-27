@@ -8,7 +8,7 @@ router.get('/all/:uid', function(req, res, next) {
     const data = req.params;
     console.log(req.params.uid, "GET METHOD");
     const userID = req.params.uid;
-    const allQuery = {
+    const allQueryDirectMessages = {
         // text: `SELECT f.ufid, text, senderid, date, u.uid
         //        FROM friends f, direct_messages dm, users u
         //        WHERE u.uid = $1 AND (f.uid1 =  u.uid OR f.uid2 = u.uid) AND dm.ufid = f.ufid`,
@@ -17,7 +17,8 @@ router.get('/all/:uid', function(req, res, next) {
                 SELECT json_build_object(
                     'uid', dm.uid,
                     'name', dm.username,
-                    'direct_messages', jsonb_agg(direct_messages)
+                    'ufid', dm.ufid,
+                    'messages', jsonb_agg(direct_messages)
                 ) AS js_object
                 FROM (
                     SELECT
@@ -36,17 +37,57 @@ router.get('/all/:uid', function(req, res, next) {
                             OR (u.uid = f.uid2 AND u2.uid = f.uid1))
                             AND dm.ufid = f.ufid
                 ) AS dm
-                GROUP BY uid, username
+                GROUP BY uid, username, ufid
+                ORDER BY ufid
                 ) AS s`,
         values: [req.params.uid] //will use userID instead
     }
-    currentClient.query(allQuery, (err, results) => {
+    currentClient.query(allQueryDirectMessages, (err, results) => {
         if (err) {
             console.log(err);
         } else {
             let direct_messagesObject = results.rows[0].result;
             console.log(direct_messagesObject);
-            res.send(direct_messagesObject);
+            const allQueryChannels = {
+                text: ` SELECT DISTINCT jsonb_pretty(jsonb_agg(js_object)) result
+                        from (
+                        SELECT json_build_object(
+                            'uid', cm.uid,
+                            'name', cm.name,
+                            'chid', cm.chid,
+                            'messages', jsonb_agg(channel_messages)
+                        ) AS js_object
+                        FROM (
+                            SELECT
+                            c.* ,
+                            u.*,
+                            json_build_object(
+                                'chid', cm.chid,
+                                'text', cm.text,
+                                'date', cm.date,
+                                'senderid', cm.senderid,
+                                'senderUsername', u.username
+                            ) AS channel_messages
+                            FROM users u, channels c, user_channels uc,  channel_messages cm
+                            WHERE $1 = uc.uid AND uc.chid = cm.chid AND u.uid = cm.senderid AND c.chid = uc.chid
+                        ) AS cm
+                        GROUP BY uid, name, chid
+                        ORDER BY chid
+                        ) AS s`,
+                values: [req.params.uid], //uid
+            }
+            currentClient.query(allQueryChannels, (err2, results2) => {
+                if (err2) {
+                    console.log(err2);
+                } else {
+                    let channel_messagesObject = results2.rows[0].result;
+                    const allMessagesObject = {
+                        direct_messages: direct_messagesObject,
+                        channel_messages: channel_messagesObject,
+                    }
+                    res.send(allMessagesObject);
+                }
+            });
             // res.send(JSON.stringify(dir);
         }
     });
@@ -88,6 +129,82 @@ router.post('/friend', function(req, res, next) {
                     res.send(result2);
                 }
             });
+        }
+    });
+});
+
+router.post('/channel', function(req, res, next) {
+    const data = req.body.data; //uid, channel_name, first_name, last_name
+    console.log(data);
+    const addChannelQuery = {
+        text: `INSERT INTO channels(name, creatorid) VALUES($1, $2) RETURNING *`,
+        values: [data.channel_name, data.uid]
+    }
+    currentClient.query(addChannelQuery, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result.rows);
+            const chid = result.rows[0].chid;
+            // let friendAddedMessage = `Hello, my name is ${data.first_name} ${data.last_name} and we are now friends on plack.`;
+            // const startMessageQuery = {
+            //     text: 'INSERT INTO direct_messages(ufid, text, senderid) VALUES($1, $2, $3) RETURNING *',
+            //     values: [ufid, friendAddedMessage, data.uid] // own id will be used for notes
+            // }
+            const connectChannelToUserQuery = {
+                text: `INSERT INTO user_channels(uid, chid) VALUES($1, $2) RETURNING *`,
+                values: [data.uid, chid]
+            }
+            currentClient.query(connectChannelToUserQuery, (err2, result2) => {
+                if (err2) {
+                    console.log(err2);
+                } else {
+                    const channelMadeMessage = `Hello, my name is ${data.first_name} ${data.last_name} and I created the channel ${data.channel_name}`;
+                    const startMessageQuery = {
+                        text: `INSERT INTO channel_messages(chid, text, senderid) VALUES($1, $2, $3) RETURNING *`,
+                        values: [chid, channelMadeMessage, data.uid]
+                    }
+                    currentClient.query(startMessageQuery, (err3, result3) => {
+                        if (err3) {
+                            console.log(err3);
+                        } else {
+                            res.send(result3);                          
+                        }     
+                    });
+                }
+            });
+        }
+    });
+});
+
+router.post('/friend/message', function(req,res, next) {
+    const data = req.body.data; // senderID, ufid, and text
+    console.log(data.ufid, "UFID")
+    const friendMessageQuery = {
+        text: 'INSERT INTO direct_messages(ufid, text, senderid) VALUES($1, $2, $3) RETURNING *',
+        values: [data.ufid, data.text, data.senderID]
+    }
+    currentClient.query(friendMessageQuery, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+});
+
+router.post('/channel/message', function(req,res, next) {
+    const data = req.body.data; // senderID, chid, and text
+    console.log(data.chid, "CHID")
+    const friendMessageQuery = {
+        text: 'INSERT INTO channel_messages(chid, text, senderid) VALUES($1, $2, $3) RETURNING *',
+        values: [data.chid, data.text, data.senderID]
+    }
+    currentClient.query(friendMessageQuery, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
         }
     });
 });

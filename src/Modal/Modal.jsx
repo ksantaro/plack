@@ -22,18 +22,26 @@ class Modal extends Component {
     // this.props.messageType;
     var uid; // temp
     if(this.props.createType == "channel") {
-        uid = this.props.channels.length;
-        //uid++;
-        this.props.channels.push({
-            chid: uid,
-            name: this.state.channelName,
-            messages: [],
-        });
-        this.setState({
-            channelName: "",
+        // uid = this.props.channels.length;
+        // //uid++;
+        // this.props.channels.push({
+        //     chid: uid,
+        //     name: this.state.channelName,
+        //     messages: [],
+        // });
+        // this.setState({
+        //     channelName: "",
+        // });
+        axios.post('http://localhost:3010/main/channel', {
+            data: {
+                channel_name: this.state.channelName,
+                uid: this.props.user.uid,
+                first_name: this.props.user.first_name,
+                last_name: this.props.user.last_name
+            }
         });
     } else {
-        uid = this.props.directMessages.length;
+        // uid = this.props.directMessages.length;
         //uid++;
         // this.props.directMessages.push({
         //     uid: uid,
@@ -44,13 +52,13 @@ class Modal extends Component {
         //     directMessageName: "",
         // });
         axios.post('http://localhost:3010/main/friend', {
-        data: {
-          email: this.state.directMessageName,
-          uid: this.props.user.uid,
-          first_name: this.props.user.first_name,
-          last_name: this.props.user.last_name
-        }      
-    })
+            data: {
+                email: this.state.directMessageName,
+                uid: this.props.user.uid,
+                first_name: this.props.user.first_name,
+                last_name: this.props.user.last_name
+            }
+        });
     }
     this.closeModal();
   }
