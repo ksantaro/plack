@@ -48,31 +48,32 @@ router.get('/all/:uid', function(req, res, next) {
         } else {
             let direct_messagesObject = results.rows[0].result;
             console.log(direct_messagesObject);
+            // ""'uid', cm.uid,"" removed
+
             const allQueryChannels = {
                 text: ` SELECT DISTINCT jsonb_pretty(jsonb_agg(js_object)) result
                         from (
                         SELECT json_build_object(
-                            'uid', cm.uid,
                             'name', cm.name,
                             'chid', cm.chid,
                             'messages', jsonb_agg(channel_messages)
                         ) AS js_object
                         FROM (
                             SELECT
-                            c.* ,
-                            u.*,
+                            c.name,
+                            cm.*,
                             json_build_object(
                                 'chid', cm.chid,
                                 'text', cm.text,
                                 'date', cm.date,
                                 'senderid', cm.senderid,
-                                'senderUsername', u.username
+                                'senderUsername', cm.username
                             ) AS channel_messages
-                            FROM users u, channels c, user_channels uc,  channel_messages cm
-                            WHERE $1 = uc.uid AND uc.chid = cm.chid AND u.uid = cm.senderid AND c.chid = uc.chid
+                            FROM channels c, user_channels uc,  (channel_messages INNER JOIN users ON uid = senderid) AS cm
+                            WHERE $1 = uc.uid AND uc.chid = cm.chid AND c.chid = uc.chid
                         ) AS cm
-                        GROUP BY uid, name, chid
-                        ORDER BY chid
+                        GROUP BY uid, name, cm.chid
+                        ORDER BY cm.chid
                         ) AS s`,
                 values: [req.params.uid], //uid
             }
@@ -205,6 +206,31 @@ router.post('/channel/message', function(req,res, next) {
             console.log(err);
         } else {
             res.send(result);
+        }
+    });
+});
+
+router.post('/channel/friend', function(req,res,next) {
+    const data = req.body.data; //email, chid
+    channelAddFriendQuery = {
+        text:  `INSERT INTO user_channels(uid,chid)
+                SELECT u.uid, $2
+                FROM users u
+                WHERE $1 = u.email AND 
+                NOT EXISTS (
+                    SELECT *
+                    FROM user_channels uc
+                    WHERE uc.uid = u.uid AND $2 = uc.chid 
+                )
+                RETURNING *`,
+        values: [data.email, data.chid]
+    }
+    currentClient.query(channelAddFriendQuery, (err,result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result.rows);
+            res.send(result.rows[0]);
         }
     });
 });

@@ -6,6 +6,7 @@ class Messages extends Component {
     super(props);
     this.state = {
         messageInput: "",
+        channelEmail: "",
     }
   }
 
@@ -21,6 +22,18 @@ class Messages extends Component {
     this.setState({
         [valueName]: e.target.value 
     })
+  }
+
+  addFriendToChannel = (e) => {
+    e.preventDefault();
+    console.log(this.state.channelEmail);
+    console.log(this.props.messageID); //chid
+    axios.post('http://localhost:3010/main/channel/friend', {
+      data: {
+        email: this.state.channelEmail, 
+        chid: this.props.messageID,
+      }
+    });
   }
 
   onSubmit = (e) => { //this.props.messageType / this.props.index
@@ -81,6 +94,7 @@ class Messages extends Component {
       <div>
         <div className="messages-title">
           {messageTitle}
+          {this.props.messageType == "channel" && <form onSubmit={this.addFriendToChannel} className="add-friend-to-channel">Add friend to channel<input value={this.state.channelEmail} onChange={(e) => {this.onChange(e, "channelEmail")}} type="email" placeholder="address@email.com"/></form>}
         </div>
         <div className="messages-block">
           {messagesList}
