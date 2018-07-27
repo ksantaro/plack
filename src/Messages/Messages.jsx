@@ -22,17 +22,17 @@ class Messages extends Component {
     })
   }
 
-  onSubmit = (e) => { //this.props.messageType / this.props.messagesID
+  onSubmit = (e) => { //this.props.messageType / this.props.index
     e.preventDefault();
     if (this.props.messageType == "channel") {
-      console.log(this.props.channels[this.props.messagesID].messages);
-      this.props.channels[this.props.messagesID].messages.push({
+      console.log(this.props.channels[this.props.index].messages);
+      this.props.channels[this.props.index].messages.push({
         text: this.state.messageInput,
         date: this.getDate(),
         username: "kenny",
       });
     } else {
-      this.props.directMessages[this.props.messagesID].messages.push({
+      this.props.directMessages[this.props.index].messages.push({
         text: this.state.messageInput,
         date: this.getDate(),
         username: "kenny",
@@ -46,17 +46,17 @@ class Messages extends Component {
 
   render() {
 
-    // console.log(this.props[this.props.messageType + 's'][this.props.messagesID])
-    var messages = this.props[this.props.messageType + 's'][this.props.messagesID]
-    var messages = this.props[this.props.messageType + 's'][this.props.messagesID] 
-    // console.log(messages);
+    // console.log(this.props[this.props.messageType + 's'][this.props.index])
+    var messages = this.props[this.props.messageType + 's'][this.props.index]
+    // var messages = this.props[this.props.messageType + 's'][this.props.index] 
+    console.log(this.props[this.props.messageType + 's'][this.props.index]);
     var messageTitle;
     var messagesList;
     if (messages) {
       messageTitle = messages['name'];
-      messagesList = messages.messages.map((message) => 
+      messagesList = messages.direct_messages.map((message) => 
         <div className="message-block">
-          <span className="message-username">{message.username} </span>
+          <span className="message-username">{message.senderUsername} </span>
           <span className="message-date">{message.date} </span>
           <p className="message-content">{message.text}</p>
         </div>

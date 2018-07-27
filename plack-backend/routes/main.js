@@ -4,30 +4,6 @@ var router = express.Router();
 var client = require('../postgres.js');
 var currentClient = client.getClient();
 
-//EXAMPLE
-// router.post('/login', function(req, res, next) {
-//     const data = req.body.data;
-//     const loginQuery = {
-//       text: 'SELECT * FROM users WHERE email = $1',
-//       values: [data.email]
-//     }
-//     currentClient.query(loginQuery, (err, result) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         if(result.rows.length == 0) { //if user does not exist
-//           console.log('user does not exist');
-//         } else {
-//           if (data.password == result.rows[0].password) { //if passwords match set session
-//             req.session.user = result.rows[0];
-//             res.json(req.session.user);
-//             // console.log("user succesfully logged in")
-//           }
-//         }
-//       }
-//     });
-//   });
-
 router.get('/all/:uid', function(req, res, next) {
     const data = req.params;
     console.log(req.params.uid, "GET METHOD");
@@ -51,7 +27,8 @@ router.get('/all/:uid', function(req, res, next) {
                         'ufid', dm.ufid,
                         'text', dm.text,
                         'date', dm.date,
-                        'senderid', dm.senderid
+                        'senderid', dm.senderid,
+                        'senderUsername', u2.username
                     ) AS direct_messages
                     FROM friends f, users u, users u2, direct_messages dm
                     WHERE u.uid = $1 AND
@@ -74,5 +51,69 @@ router.get('/all/:uid', function(req, res, next) {
         }
     });
 });
+
+
+router.post('/friend', function(req, res, next) {
+    const data = req.body.data; //uid, email, first_name, last_name
+    const addFriendQuery = {
+        text: ` INSERT INTO friends(uid1, uid2)
+                SELECT $1, newFriend.uid
+                FROM (SELECT u.uid
+                      FROM users u
+                      WHERE u.email = $2) AS newFriend
+                
+                WHERE NOT EXISTS (
+                SELECT *
+                FROM friends f
+                WHERE (($1 = f.uid1 AND newFriend.uid = f.uid2)
+                    OR ($1 = f.uid2 AND newFriend.uid = f.uid1))
+                )
+                RETURNING *`,
+        values: [data.uid, data.email]
+    }
+    currentClient.query(addFriendQuery, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            const ufid = result.rows[0].ufid;
+            let friendAddedMessage = `Hello, my name is ${data.first_name} ${data.last_name} and we are now friends on plack.`;
+            const startMessageQuery = {
+                text: 'INSERT INTO direct_messages(ufid, text, senderid) VALUES($1, $2, $3) RETURNING *',
+                values: [ufid, friendAddedMessage, data.uid] // own id will be used for notes
+            }
+            currentClient.query(startMessageQuery, (err2, result2) => {
+                if (err2) {
+                    console.log(err2);
+                } else {
+                    res.send(result2);
+                }
+            });
+        }
+    });
+});
+
+//EXAMPLE
+// router.post('/login', function(req, res, next) {
+//     const data = req.body.data;
+//     const loginQuery = {
+//       text: 'SELECT * FROM users WHERE email = $1',
+//       values: [data.email]
+//     }
+//     currentClient.query(loginQuery, (err, result) => {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         if(result.rows.length == 0) { //if user does not exist
+//           console.log('user does not exist');
+//         } else {
+//           if (data.password == result.rows[0].password) { //if passwords match set session
+//             req.session.user = result.rows[0];
+//             res.json(req.session.user);
+//             // console.log("user succesfully logged in")
+//           }
+//         }
+//       }
+//     });
+//   });
 
 module.exports = router;

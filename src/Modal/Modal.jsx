@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 
 class Modal extends Component {
@@ -34,14 +35,22 @@ class Modal extends Component {
     } else {
         uid = this.props.directMessages.length;
         //uid++;
-        this.props.directMessages.push({
-            uid: uid,
-            name: this.state.directMessageName,
-            messages: [],
-        });
-        this.setState({
-            directMessageName: "",
-        });
+        // this.props.directMessages.push({
+        //     uid: uid,
+        //     name: this.state.directMessageName,
+        //     messages: [],
+        // });
+        // this.setState({
+        //     directMessageName: "",
+        // });
+        axios.post('http://localhost:3010/main/friend', {
+        data: {
+          email: this.state.directMessageName,
+          uid: this.props.user.uid,
+          first_name: this.props.user.first_name,
+          last_name: this.props.user.last_name
+        }      
+    })
     }
     this.closeModal();
   }

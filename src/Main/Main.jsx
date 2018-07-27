@@ -94,12 +94,12 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        messagesID: 0, // starts with the current users UID
+        index: 0, // starts with the current users UID
         messageType: "directMessage", // directMessage or channel
         newDirectMessageModalOpen: false,
         newChannelModalOpen: false,
         channels: {},
-        directMessages: {},
+        directMessages: [],
         user: {},
       }
     // this.state.channels = Xchannels;
@@ -124,14 +124,16 @@ class Main extends Component {
       // }).then(function(response) {
       //   console.log(response);
       // });
-      this.setState({
-        user: user,
-        messagesID: user.uid,
-        directMessages: X2directMessages,
-      });
+      
       axios.get(`http://localhost:3010/main/all/${user.uid}`, {
-      }).then(function(response) {
-        console.log(response);
+      }).then((response) => {
+        console.log(response.data);
+        const directMessages = response.data;
+        this.setState({
+          user: user,
+          index: 0,
+          directMessages: directMessages,
+        });
       })
       // TODO get channels/directmessages
     } else {
@@ -145,9 +147,9 @@ class Main extends Component {
     })
   }
 
-  onClick = (e, id, type) => { // type (directMessage or channel)
+  onClick = (e, index, type) => { // type (directMessage or channel)
     this.setState({
-      messagesID: id,
+      index: index,
       messageType: type,
     });
   }
@@ -177,7 +179,7 @@ class Main extends Component {
               //messageType={this.props.messageType}
               channels={this.state.channels}
               directMessages={this.state.directMessages}
-
+              user={this.state.user}
             />
           }
           {
@@ -188,14 +190,14 @@ class Main extends Component {
               //messageType={this.props.messageType}
               directMessages={this.state.directMessages}
               channels={this.state.channels}
-
+              user={this.state.user}
             />
           }
           <SideBar 
             channels={this.state.channels}
             directMessages={this.state.directMessages}
             onClick={this.onClick}
-            messagesID={this.state.messagesID}
+            index={this.state.index}
             messageType={this.state.messageType}
             newDirectMessageModalOpen={this.state.newDirectMessageModalOpen}
             newChannelModalOpen={this.state.newChannelModalOpen}
@@ -207,7 +209,7 @@ class Main extends Component {
           <Messages 
             channels={this.state.channels}
             directMessages={this.state.directMessages}
-            messagesID={this.state.messagesID}
+            index={this.state.index}
             messageType={this.state.messageType}
           /> {/* props: channel */}
         </div>
