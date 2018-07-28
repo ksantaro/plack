@@ -51,6 +51,11 @@ class Messages extends Component {
                 chid: this.props.messageID,
                 text: this.state.messageInput
             }
+        }).then((response) => {
+          const newMessage = response.data.rows[0];
+          newMessage.senderUsername = this.props.user.username;
+          console.log(newMessage);
+          this.props.addNewMessage(true, newMessage);
         });
     } else {
       // this.props.directMessages[this.props.index].messages.push({
@@ -66,7 +71,9 @@ class Messages extends Component {
             }
         }).then((response) => {
           const newMessage = response.data.rows[0];
+          newMessage.senderUsername = this.props.user.username;
           console.log(newMessage);
+          this.props.addNewMessage(false, newMessage);
         });
     }
 

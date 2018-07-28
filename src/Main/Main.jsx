@@ -169,10 +169,26 @@ class Main extends Component {
     });
   }
 
-  addNewMessage = (e, isDirectMessage) => { // event, bool
+  addNewMessage = (isDirectMessage, newMessage) => { // event, bool
     if(isDirectMessage) {
+      let channels = this.state.channels;
+      console.log(channels);
+      channels[this.state.index].messages.unshift(newMessage);
+      this.setState({
+        channels: channels
+      })
+    } else {
+      let directMessages = this.state.directMessages;
+      console.log(directMessages);
+      directMessages[this.state.index].messages.unshift(newMessage);
+      this.setState({
+        directMessages: directMessages
+      })
+    }
+  }
 
-    } else {}
+  addNewChannel = () => {
+    
   }
 
   render() {
@@ -222,6 +238,7 @@ class Main extends Component {
             messageType={this.state.messageType}
             messageID={this.state.messageID}
             user={this.state.user}
+            addNewMessage={this.addNewMessage}
           /> {/* props: channel */}
         </div>
       </div>
