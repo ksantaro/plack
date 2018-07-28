@@ -22,7 +22,7 @@ router.get('/all/:uid', function(req, res, next) {
                     json_build_object(
                         'ufid', dms.ufid,
                         'text', dms.text,
-                        'date', dms.date,
+                        'date', to_char(dms.date, 'MM/DD/YY HH12:MI PM'),
                         'senderid', dms.senderid,
                         'senderUsername', dms.username
                     ) as direct_messages
@@ -81,7 +81,7 @@ router.get('/all/:uid', function(req, res, next) {
                                 json_build_object(
                                 'chid', cms.chid,
                                 'text', cms.text,
-                                'date', cms.date,
+                                'date', to_char(cms.date, 'MM/DD/YY HH12:MI PM'),
                                 'senderid', cms.senderid,
                                 'senderUsername', cms.senderName
                                 ) AS channel_messages

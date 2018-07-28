@@ -39,9 +39,11 @@ class Modal extends Component {
                 first_name: this.props.user.first_name,
                 last_name: this.props.user.last_name
             }
+        }).then((response) => {
+            this.props.resetView();
         });
     } else {
-        // uid = this.props.directMessages.length;
+        // uid = this.props.props.directMessages.length;
         //uid++;
         // this.props.directMessages.push({
         //     uid: uid,
@@ -58,6 +60,9 @@ class Modal extends Component {
                 first_name: this.props.user.first_name,
                 last_name: this.props.user.last_name
             }
+        }).then((response) => {
+            this.props.resetView();
+            //this.props.addNewDirectMessage();
         });
     }
     this.closeModal();

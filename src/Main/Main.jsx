@@ -149,6 +149,24 @@ class Main extends Component {
     }
   }
 
+  resetView = () => {
+    console.log(this.state.user.uid);
+    axios.get(`http://localhost:3010/main/all/${this.state.user.uid}`, {
+      }).then((response) => {
+        let channelMessages = JSON.parse(response.data.channel_messages);
+        let directMessages = JSON.parse(response.data.direct_messages);
+        console.log(directMessages);
+        console.log(channelMessages)
+        if (!channelMessages) {
+          channelMessages = [];
+        }
+        this.setState({
+          directMessages: directMessages,
+          channels: channelMessages,
+        });
+      })
+  }
+
   onChange = (e, valueName) => {
     this.setState({
         [valueName]: e.target.value 
@@ -173,22 +191,18 @@ class Main extends Component {
     if(isDirectMessage) {
       let channels = this.state.channels;
       console.log(channels);
-      channels[this.state.index].messages.unshift(newMessage);
+      channels[this.state.index].messages.push(newMessage);
       this.setState({
         channels: channels
       })
     } else {
       let directMessages = this.state.directMessages;
       console.log(directMessages);
-      directMessages[this.state.index].messages.unshift(newMessage);
+      directMessages[this.state.index].messages.push(newMessage);
       this.setState({
         directMessages: directMessages
       })
     }
-  }
-
-  addNewChannel = () => {
-    
   }
 
   render() {
@@ -201,10 +215,10 @@ class Main extends Component {
             <Modal 
               createType="channel"
               toggleModal={this.toggleModal}
-              //messageType={this.props.messageType}
               channels={this.state.channels}
               directMessages={this.state.directMessages}
               user={this.state.user}
+              resetView={this.resetView}
             />
           }
           {
@@ -212,10 +226,10 @@ class Main extends Component {
             <Modal
               createType="directMessage"
               toggleModal={this.toggleModal}
-              //messageType={this.props.messageType}
               directMessages={this.state.directMessages}
               channels={this.state.channels}
               user={this.state.user}
+              resetView={this.resetView}
             />
           }
           <SideBar 
