@@ -64,6 +64,9 @@ class Messages extends Component {
                 ufid: this.props.messageID,
                 text: this.state.messageInput
             }
+        }).then((response) => {
+          const newMessage = response.data.rows[0];
+          console.log(newMessage);
         });
     }
 

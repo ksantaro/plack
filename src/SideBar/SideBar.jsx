@@ -57,7 +57,7 @@ class SideBar extends Component {
     // })
     return (
       <div className="sidebar">
-        <div onClick={this.signOut}>
+        <div className="sign-out" onClick={this.signOut}>
           Sign Out
         </div>
         <div className="username">

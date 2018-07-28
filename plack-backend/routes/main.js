@@ -30,7 +30,8 @@ router.get('/all/:uid', function(req, res, next) {
                             FROM friends f, users u, direct_messages dm, users u2
                             WHERE ((f.uid1 = $1 AND dm.senderid = u.uid AND u2.uid = f.uid2) OR
                                     (f.uid2 = $1 AND dm.senderid = u.uid AND u2.uid = f.uid1))
-                                    AND dm.ufid = f.ufid) AS dms) AS dms
+                                    AND dm.ufid = f.ufid
+                            ORDER BY date DESC) AS dms) AS dms
                     group by uid2, fusername, ufid
                     order by ufid) AS s`,
         values: [req.params.uid] //will use userID instead
@@ -44,30 +45,54 @@ router.get('/all/:uid', function(req, res, next) {
             // ""'uid', cm.uid,"" removed
 
             const allQueryChannels = {
-                text: ` SELECT DISTINCT jsonb_pretty(jsonb_agg(js_object)) result
-                        from (
-                        SELECT json_build_object(
-                            'name', cm.name,
-                            'chid', cm.chid,
-                            'messages', jsonb_agg(channel_messages)
-                        ) AS js_object
+                // text: ` SELECT DISTINCT jsonb_pretty(jsonb_agg(js_object)) result
+                //         from (
+                //         SELECT json_build_object(
+                //             'name', cm.name,
+                //             'chid', cm.chid,
+                //             'messages', jsonb_agg(channel_messages)
+                //         ) AS js_object
+                //         FROM (
+                //             SELECT
+                //             c.name,
+                //             cm.*,
+                //             json_build_object(
+                //                 'chid', cm.chid,
+                //                 'text', cm.text,
+                //                 'date', cm.date,
+                //                 'senderid', cm.senderid,
+                //                 'senderUsername', cm.username
+                //             ) AS channel_messages
+                //             FROM channels c, user_channels uc,  (channel_messages INNER JOIN users ON uid = senderid) AS cm
+                //             WHERE $1 = uc.uid AND uc.chid = cm.chid AND c.chid = uc.chid
+                //         ) AS cm
+                //         GROUP BY uid, name, cm.chid
+                //         ORDER BY cm.chid
+                //         ) AS s`,
+                text: ` SELECT jsonb_pretty(jsonb_agg(js_object)) result
                         FROM (
-                            SELECT
-                            c.name,
-                            cm.*,
-                            json_build_object(
-                                'chid', cm.chid,
-                                'text', cm.text,
-                                'date', cm.date,
-                                'senderid', cm.senderid,
-                                'senderUsername', cm.username
-                            ) AS channel_messages
-                            FROM channels c, user_channels uc,  (channel_messages INNER JOIN users ON uid = senderid) AS cm
-                            WHERE $1 = uc.uid AND uc.chid = cm.chid AND c.chid = uc.chid
-                        ) AS cm
-                        GROUP BY uid, name, cm.chid
-                        ORDER BY cm.chid
-                        ) AS s`,
+                            SELECT json_build_object(
+                            'name', cms.name,
+                            'chid', cms.chid,
+                            'messages', json_agg(channel_messages)
+                            ) AS js_object
+                            FROM (
+                            SELECT *,
+                                json_build_object(
+                                'chid', cms.chid,
+                                'text', cms.text,
+                                'date', cms.date,
+                                'senderid', cms.senderid,
+                                'senderUsername', cms.senderName
+                                ) AS channel_messages
+                            FROM ( SELECT c.chid, c.name, text, date, u.username as creatorName, u.uid AS creatorid, u2.uid AS senderid, u2.username AS senderName
+                                    FROM channels c, user_channels uc, users u, channel_messages cm, users u2
+                                    WHERE $1 = uc.uid AND c.chid = uc.chid AND cm.chid = c.chid
+                                        AND u.uid = c.creatorid AND cm.senderid = u2.uid
+                                    ORDER BY date desc    
+                                ) AS cms) AS cms
+                            GROUP BY name, chid
+                            ORDER BY chid) AS s`,
                 values: [req.params.uid], //uid
             }
             currentClient.query(allQueryChannels, (err2, results2) => {
@@ -140,11 +165,6 @@ router.post('/channel', function(req, res, next) {
         } else {
             console.log(result.rows);
             const chid = result.rows[0].chid;
-            // let friendAddedMessage = `Hello, my name is ${data.first_name} ${data.last_name} and we are now friends on plack.`;
-            // const startMessageQuery = {
-            //     text: 'INSERT INTO direct_messages(ufid, text, senderid) VALUES($1, $2, $3) RETURNING *',
-            //     values: [ufid, friendAddedMessage, data.uid] // own id will be used for notes
-            // }
             const connectChannelToUserQuery = {
                 text: `INSERT INTO user_channels(uid, chid) VALUES($1, $2) RETURNING *`,
                 values: [data.uid, chid]
