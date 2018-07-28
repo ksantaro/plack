@@ -78,8 +78,12 @@ class Messages extends Component {
     var messages = this.props[this.props.messageType + 's'][this.props.index]
     // var messages = this.props[this.props.messageType + 's'][this.props.index] 
     var messageTitle;
+    console.log(messages);
     var messagesList;
     if (messages) {
+      console.log(
+        "in"
+      )
       messageTitle = messages['name'];
       messagesList = messages.messages.map((message) => 
         <div className="message-block">

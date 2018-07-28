@@ -9,37 +9,30 @@ router.get('/all/:uid', function(req, res, next) {
     console.log(req.params.uid, "GET METHOD");
     const userID = req.params.uid;
     const allQueryDirectMessages = {
-        // text: `SELECT f.ufid, text, senderid, date, u.uid
-        //        FROM friends f, direct_messages dm, users u
-        //        WHERE u.uid = $1 AND (f.uid1 =  u.uid OR f.uid2 = u.uid) AND dm.ufid = f.ufid`,
-        text: ` SELECT DISTINCT jsonb_pretty(jsonb_agg(js_object)) result
-                from (
-                SELECT json_build_object(
-                    'uid', dm.uid,
-                    'name', dm.username,
-                    'ufid', dm.ufid,
-                    'messages', jsonb_agg(direct_messages)
-                ) AS js_object
+        text: ` SELECT jsonb_pretty(jsonb_agg(js_object)) result
                 FROM (
-                    SELECT
-                    f.*,
-                    u2.* ,
+                    SELECT json_build_object(
+                    'uid', dms.uid2,
+                    'name', dms.fusername,
+                    'ufid', dms.ufid,
+                    'messages', json_agg(direct_messages)
+                    ) AS js_object
+                    FROM (
+                    SELECT *,
                     json_build_object(
-                        'ufid', dm.ufid,
-                        'text', dm.text,
-                        'date', dm.date,
-                        'senderid', dm.senderid,
-                        'senderUsername', u2.username
-                    ) AS direct_messages
-                    FROM friends f, users u, users u2, direct_messages dm
-                    WHERE u.uid = $1 AND
-                    ((u.uid = f.uid1 AND u2.uid = f.uid2)
-                            OR (u.uid = f.uid2 AND u2.uid = f.uid1))
-                            AND dm.ufid = f.ufid
-                ) AS dm
-                GROUP BY uid, username, ufid
-                ORDER BY ufid
-                ) AS s`,
+                        'ufid', dms.ufid,
+                        'text', dms.text,
+                        'date', dms.date,
+                        'senderid', dms.senderid,
+                        'senderUsername', dms.username
+                    ) as direct_messages
+                    FROM ( SELECT f.ufid, text, date, dm.senderid, u.username, u2.uid AS uid2, u2.username AS fusername
+                            FROM friends f, users u, direct_messages dm, users u2
+                            WHERE ((f.uid1 = $1 AND dm.senderid = u.uid AND u2.uid = f.uid2) OR
+                                    (f.uid2 = $1 AND dm.senderid = u.uid AND u2.uid = f.uid1))
+                                    AND dm.ufid = f.ufid) AS dms) AS dms
+                    group by uid2, fusername, ufid
+                    order by ufid) AS s`,
         values: [req.params.uid] //will use userID instead
     }
     currentClient.query(allQueryDirectMessages, (err, results) => {

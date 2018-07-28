@@ -128,10 +128,13 @@ class Main extends Component {
       
       axios.get(`http://localhost:3010/main/all/${user.uid}`, {
       }).then((response) => {
-        const channelMessages = JSON.parse(response.data.channel_messages);
-        const directMessages = JSON.parse(response.data.direct_messages);
+        let channelMessages = JSON.parse(response.data.channel_messages);
+        let directMessages = JSON.parse(response.data.direct_messages);
         console.log(directMessages);
         console.log(channelMessages)
+        if (!channelMessages) {
+          channelMessages = [];
+        }
         this.setState({
           user: user,
           index: 0,
