@@ -5,9 +5,6 @@ var client = require('../postgres.js');
 var currentClient = client.getClient();
 
 router.get('/all/:uid', function(req, res, next) {
-    const data = req.params;
-    console.log(req.params.uid, "GET METHOD");
-    const userID = req.params.uid;
     const allQueryDirectMessages = {
         text: ` SELECT jsonb_pretty(jsonb_agg(js_object)) result
                 FROM (
@@ -41,34 +38,7 @@ router.get('/all/:uid', function(req, res, next) {
             console.log(err);
         } else {
             let direct_messagesObject = results.rows[0].result;
-            console.log(direct_messagesObject);
-            // ""'uid', cm.uid,"" removed
-
             const allQueryChannels = {
-                // text: ` SELECT DISTINCT jsonb_pretty(jsonb_agg(js_object)) result
-                //         from (
-                //         SELECT json_build_object(
-                //             'name', cm.name,
-                //             'chid', cm.chid,
-                //             'messages', jsonb_agg(channel_messages)
-                //         ) AS js_object
-                //         FROM (
-                //             SELECT
-                //             c.name,
-                //             cm.*,
-                //             json_build_object(
-                //                 'chid', cm.chid,
-                //                 'text', cm.text,
-                //                 'date', cm.date,
-                //                 'senderid', cm.senderid,
-                //                 'senderUsername', cm.username
-                //             ) AS channel_messages
-                //             FROM channels c, user_channels uc,  (channel_messages INNER JOIN users ON uid = senderid) AS cm
-                //             WHERE $1 = uc.uid AND uc.chid = cm.chid AND c.chid = uc.chid
-                //         ) AS cm
-                //         GROUP BY uid, name, cm.chid
-                //         ORDER BY cm.chid
-                //         ) AS s`,
                 text: ` SELECT jsonb_pretty(jsonb_agg(js_object)) result
                         FROM (
                             SELECT json_build_object(
@@ -107,7 +77,6 @@ router.get('/all/:uid', function(req, res, next) {
                     res.send(allMessagesObject);
                 }
             });
-            // res.send(JSON.stringify(dir);
         }
     });
 });
@@ -154,7 +123,6 @@ router.post('/friend', function(req, res, next) {
 
 router.post('/channel', function(req, res, next) {
     const data = req.body.data; //uid, channel_name, first_name, last_name
-    console.log(data);
     const addChannelQuery = {
         text: `INSERT INTO channels(name, creatorid) VALUES($1, $2) RETURNING *`,
         values: [data.channel_name, data.uid]
@@ -163,7 +131,6 @@ router.post('/channel', function(req, res, next) {
         if (err) {
             console.log(err);
         } else {
-            console.log(result.rows);
             const chid = result.rows[0].chid;
             const connectChannelToUserQuery = {
                 text: `INSERT INTO user_channels(uid, chid) VALUES($1, $2) RETURNING *`,
@@ -193,7 +160,6 @@ router.post('/channel', function(req, res, next) {
 
 router.post('/friend/message', function(req,res, next) {
     const data = req.body.data; // senderID, ufid, and text
-    console.log(data.ufid, "UFID")
     const friendMessageQuery = {
         text: 'INSERT INTO direct_messages(ufid, text, senderid) VALUES($1, $2, $3) RETURNING *',
         values: [data.ufid, data.text, data.senderID]
@@ -209,7 +175,6 @@ router.post('/friend/message', function(req,res, next) {
 
 router.post('/channel/message', function(req,res, next) {
     const data = req.body.data; // senderID, chid, and text
-    console.log(data.chid, "CHID")
     const friendMessageQuery = {
         text: 'INSERT INTO channel_messages(chid, text, senderid) VALUES($1, $2, $3) RETURNING *',
         values: [data.chid, data.text, data.senderID]
@@ -242,34 +207,9 @@ router.post('/channel/friend', function(req,res,next) {
         if (err) {
             console.log(err);
         } else {
-            console.log(result.rows);
             res.send(result.rows[0]);
         }
     });
 });
-
-//EXAMPLE
-// router.post('/login', function(req, res, next) {
-//     const data = req.body.data;
-//     const loginQuery = {
-//       text: 'SELECT * FROM users WHERE email = $1',
-//       values: [data.email]
-//     }
-//     currentClient.query(loginQuery, (err, result) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         if(result.rows.length == 0) { //if user does not exist
-//           console.log('user does not exist');
-//         } else {
-//           if (data.password == result.rows[0].password) { //if passwords match set session
-//             req.session.user = result.rows[0];
-//             res.json(req.session.user);
-//             // console.log("user succesfully logged in")
-//           }
-//         }
-//       }
-//     });
-//   });
 
 module.exports = router;

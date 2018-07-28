@@ -19,19 +19,7 @@ class Modal extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    // this.props.messageType;
-    var uid; // temp
     if(this.props.createType == "channel") {
-        // uid = this.props.channels.length;
-        // //uid++;
-        // this.props.channels.push({
-        //     chid: uid,
-        //     name: this.state.channelName,
-        //     messages: [],
-        // });
-        // this.setState({
-        //     channelName: "",
-        // });
         axios.post('http://localhost:3010/main/channel', {
             data: {
                 channel_name: this.state.channelName,
@@ -43,16 +31,6 @@ class Modal extends Component {
             this.props.resetView();
         });
     } else {
-        // uid = this.props.props.directMessages.length;
-        //uid++;
-        // this.props.directMessages.push({
-        //     uid: uid,
-        //     name: this.state.directMessageName,
-        //     messages: [],
-        // });
-        // this.setState({
-        //     directMessageName: "",
-        // });
         axios.post('http://localhost:3010/main/friend', {
             data: {
                 email: this.state.directMessageName,
@@ -62,7 +40,6 @@ class Modal extends Component {
             }
         }).then((response) => {
             this.props.resetView();
-            //this.props.addNewDirectMessage();
         });
     }
     this.closeModal();

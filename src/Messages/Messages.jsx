@@ -10,14 +10,6 @@ class Messages extends Component {
     }
   }
 
-  getDate = () => {
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes(); //+ ":" + today.getSeconds();
-    var dateTime = date+' '+time;
-    return dateTime;
-  }
-
   onChange = (e, valueName) => {
     this.setState({
         [valueName]: e.target.value 
@@ -26,8 +18,6 @@ class Messages extends Component {
 
   addFriendToChannel = (e) => {
     e.preventDefault();
-    console.log(this.state.channelEmail);
-    console.log(this.props.messageID); //chid
     axios.post('http://localhost:3010/main/channel/friend', {
       data: {
         email: this.state.channelEmail, 
@@ -36,15 +26,9 @@ class Messages extends Component {
     });
   }
 
-  onSubmit = (e) => { //this.props.messageType / this.props.index
+  onSubmit = (e) => {
     e.preventDefault();
     if (this.props.messageType == "channel") {
-      // console.log(this.props.channels[this.props.index].messages);
-      // this.props.channels[this.props.index].messages.push({
-      //   text: this.state.messageInput,
-      //   date: this.getDate(),
-      //   username: "kenny",
-      // });
       axios.post('http://localhost:3010/main/channel/message', {
             data: {
                 senderID: this.props.user.uid,
@@ -54,15 +38,9 @@ class Messages extends Component {
         }).then((response) => {
           const newMessage = response.data.rows[0];
           newMessage.senderUsername = this.props.user.username;
-          console.log(newMessage);
           this.props.addNewMessage(true, newMessage);
         });
     } else {
-      // this.props.directMessages[this.props.index].messages.push({
-      //   text: this.state.messageInput,
-      //   date: this.getDate(),
-      //   username: "kenny",
-      // });
       axios.post('http://localhost:3010/main/friend/message', {
             data: {
                 senderID: this.props.user.uid,
@@ -72,7 +50,6 @@ class Messages extends Component {
         }).then((response) => {
           const newMessage = response.data.rows[0];
           newMessage.senderUsername = this.props.user.username;
-          console.log(newMessage);
           this.props.addNewMessage(false, newMessage);
         });
     }
@@ -83,17 +60,10 @@ class Messages extends Component {
   }
 
   render() {
-
-    // console.log(this.props[this.props.messageType + 's'][this.props.index])
     var messages = this.props[this.props.messageType + 's'][this.props.index]
-    // var messages = this.props[this.props.messageType + 's'][this.props.index] 
     var messageTitle;
-    console.log(messages);
     var messagesList;
     if (messages) {
-      console.log(
-        "in"
-      )
       messageTitle = messages['name'];
       messagesList = messages.messages.map((message) => 
         <div className="message-block">

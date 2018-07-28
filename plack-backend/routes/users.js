@@ -27,7 +27,6 @@ router.post('/login', function(req, res, next) {
         if (data.password == result.rows[0].password) { //if passwords match set session
           req.session.user = result.rows[0];
           res.json(req.session.user);
-          // console.log("user succesfully logged in")
         }
       }
     }
@@ -50,8 +49,6 @@ router.post('/register', function(req,res) {
     if (err) {
       console.log(err);
     } else {
-      console.log(result);
-      // res.send(result);
       let userID = result.rows[0].uid;
       const addSelfFriend = {
         text: 'INSERT INTO friends(uid1, uid2) VALUES($1, $1) RETURNING *',
@@ -61,7 +58,6 @@ router.post('/register', function(req,res) {
         if (err2) {
           console.log(err2);
         } else {
-          console.log(result2);
           let userFriendID = result2.rows[0].ufid;
           let welcomeMessage = "Hello and welcome to plack! Please use this space to take any notes";
           const startMessage = {
@@ -72,7 +68,6 @@ router.post('/register', function(req,res) {
             if (err3) {
               console.log(err3);
             } else {
-              console.log(result3);
               res.send(result3);
             }
           });
