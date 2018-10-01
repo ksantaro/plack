@@ -9,6 +9,7 @@ class Login extends Component {
     this.state = {
         email: '',
         password: '',
+        error: false,
     }
   }
 
@@ -29,7 +30,7 @@ class Login extends Component {
     .then(function(res) {
       let user = JSON.stringify(res.data); // Eventually would be replaced by Redux-Persits
       sessionStorage.setItem('user', user);
-        let s = sessionStorage.getItem('user');
+      // let s = sessionStorage.getItem('user');
       window.location.href = "http://localhost:3000/main"
 
     });

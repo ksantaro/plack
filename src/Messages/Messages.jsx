@@ -28,7 +28,7 @@ class Messages extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    if (this.props.messageType == "channel") {
+    if (this.props.messageType === "channel") {
       axios.post('http://localhost:3010/main/channel/message', {
             data: {
                 senderID: this.props.user.uid,
@@ -78,7 +78,7 @@ class Messages extends Component {
       <div>
         <div className="messages-title">
           {messageTitle}
-          {this.props.messageType == "channel" && <form onSubmit={this.addFriendToChannel} className="add-friend-to-channel">Add friend to channel<input value={this.state.channelEmail} onChange={(e) => {this.onChange(e, "channelEmail")}} type="email" placeholder="address@email.com"/></form>}
+          {this.props.messageType === "channel" && <form onSubmit={this.addFriendToChannel} className="add-friend-to-channel">Add friend to channel<input value={this.state.channelEmail} onChange={(e) => {this.onChange(e, "channelEmail")}} type="email" placeholder="address@email.com"/></form>}
         </div>
         <div className="messages-block">
           {messagesList}

@@ -20,7 +20,7 @@ class Main extends Component {
   }
 
   componentDidMount = () => {
-    if (sessionStorage.length != 0) {
+    if (sessionStorage.length !== 0) {
       let user = JSON.parse(sessionStorage.getItem('user'));
       axios.get(`http://localhost:3010/main/all/${user.uid}`, {
       }).then((response) => {

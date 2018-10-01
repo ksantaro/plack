@@ -15,6 +15,7 @@ class SignUp extends Component {
         email: '',
         password: '',
         confirmPassword: '',
+        errorMessage: '', // Error
     }
   }
 
@@ -26,7 +27,12 @@ class SignUp extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3010/users/register', {
+    if (this.state.password != this.state.confirmPassword) {
+      this.setState({
+        errorMessage: "ERROR: passwords do not match"
+      });
+    } else {
+      axios.post('http://localhost:3010/users/register', {
       data: {
         first_name: this.state.firstName,
         last_name: this.state.lastName,
@@ -34,14 +40,15 @@ class SignUp extends Component {
         email: this.state.email,
         password: this.state.password,
       },
-    }).then(function(res) {
+      }).then(function(res) {
         console.log("THEN");
         window.location.href = "http://localhost:3000/login"
-    });
-
+      });
+    }
   }
 
   render() {
+    let errorMessage = <div className="error-message" >{this.state.errorMessage}</div>
     return (
       <div>
         <Topbar/>
@@ -57,6 +64,7 @@ class SignUp extends Component {
                 <input type="password" placeholder="confirm password" value={this.state.confirmPassword} onChange={(e) => {this.onChange(e, "confirmPassword")}} required/>
                 <input type="submit" value="submit &#8594;" />
             </form>
+            {errorMessage}
             <a href="./login">already have an account?</a>
         </div>
       </div>

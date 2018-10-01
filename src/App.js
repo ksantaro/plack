@@ -3,7 +3,7 @@ import './App.css';
 import SignUp from './SignUp/SignUp';
 import Login from './Login/Login';
 import Main from './Main/Main';
-import {Route, Switch} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 
 class App extends Component {
   render() {
