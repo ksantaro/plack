@@ -12,7 +12,8 @@ router.get('/all/:uid', function(req, res, next) {
                     'uid', dms.uid2,
                     'name', dms.fusername,
                     'ufid', dms.ufid,
-                    'messages', json_agg(direct_messages)
+                    'messages', json_agg(direct_messages),
+                    'input', ''
                     ) AS js_object
                     FROM (
                     SELECT *,
@@ -28,7 +29,7 @@ router.get('/all/:uid', function(req, res, next) {
                             WHERE ((f.uid1 = $1 AND dm.senderid = u.uid AND u2.uid = f.uid2) OR
                                     (f.uid2 = $1 AND dm.senderid = u.uid AND u2.uid = f.uid1))
                                     AND dm.ufid = f.ufid
-                            ORDER BY date DESC) AS dms) AS dms
+                            ORDER BY date ASC) AS dms) AS dms
                     group by uid2, fusername, ufid
                     order by ufid) AS s`,
         values: [req.params.uid] //will use userID instead
@@ -44,7 +45,8 @@ router.get('/all/:uid', function(req, res, next) {
                             SELECT json_build_object(
                             'name', cms.name,
                             'chid', cms.chid,
-                            'messages', json_agg(channel_messages)
+                            'messages', json_agg(channel_messages),
+                            'input', ''
                             ) AS js_object
                             FROM (
                             SELECT *,

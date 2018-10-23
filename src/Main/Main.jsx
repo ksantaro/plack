@@ -26,6 +26,8 @@ class Main extends Component {
       }).then((response) => {
         let channelMessages = JSON.parse(response.data.channel_messages);
         let directMessages = JSON.parse(response.data.direct_messages);
+        console.log(channelMessages);
+        channelMessages
         if (!channelMessages) {
           channelMessages = [];
         }
@@ -61,6 +63,22 @@ class Main extends Component {
     this.setState({
         [valueName]: e.target.value 
     })
+  }
+
+  updateInput = (inputText) => {
+    //need to update state not just assign value
+    
+    this.state[this.state.messageType + 's'][this.state.index].input = inputText;
+    //let x = this.state[this.state.messageType + 's'][this.state.index].input;
+    //seperate x into own array and then change its input
+    let updatedMessages = this.state[this.state.messageType + 's'];
+    updatedMessages[this.state.index].input = inputText;
+    //updatedMessages = e.target.value;
+    this.setState({
+      [this.state.messageType + 's']: updatedMessages 
+    });
+    console.log(this.state[this.state.messageType + 's'][this.state.index].input)
+    //console.log(this.props[this.props.messageType + 's'][this.props.index].input)
   }
 
   onClick = (e, index, messageID, type) => { // type (directMessage or channel)
@@ -141,6 +159,7 @@ class Main extends Component {
             messageID={this.state.messageID}
             user={this.state.user}
             addNewMessage={this.addNewMessage}
+            updateInput={this.updateInput}
           />
         </div>
       </div>

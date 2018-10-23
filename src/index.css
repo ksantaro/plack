@@ -138,12 +138,16 @@ input {
   width: calc(100% - 220px);
 }
 
+.messages-side {
+  height: 100%;
+}
+
 .messages-block {
   position: absolute;
-  bottom: 55px;
   width: 100%;
   max-height: 85%;
   overflow: scroll;
+  position: relative;
 }
 
 .messages-title {
@@ -154,6 +158,9 @@ input {
   border-bottom: 1px solid #d4cece;
   font-weight: bold;
   color: #484848;
+  position: relative;
+  z-index: 1;
+  background-color: #fbfbfb;
 }
 
 .messages-title .add-friend-to-channel {

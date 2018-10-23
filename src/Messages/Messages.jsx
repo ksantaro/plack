@@ -11,6 +11,8 @@ class Messages extends Component {
   }
 
   onChange = (e, valueName) => {
+    this.props[this.props.messageType + 's'][this.props.index].input = e.target.value;
+    console.log(this.props[this.props.messageType + 's'][this.props.index].input)
     this.setState({
         [valueName]: e.target.value 
     })
@@ -33,7 +35,7 @@ class Messages extends Component {
             data: {
                 senderID: this.props.user.uid,
                 chid: this.props.messageID,
-                text: this.state.messageInput
+                text: this.props[this.props.messageType + 's'][this.props.index].input
             }
         }).then((response) => {
           const newMessage = response.data.rows[0];
@@ -45,7 +47,7 @@ class Messages extends Component {
             data: {
                 senderID: this.props.user.uid,
                 ufid: this.props.messageID,
-                text: this.state.messageInput
+                text: this.props[this.props.messageType + 's'][this.props.index].input
             }
         }).then((response) => {
           const newMessage = response.data.rows[0];
@@ -54,16 +56,17 @@ class Messages extends Component {
         });
     }
 
-    this.setState({
-      messageInput: "",
-    });
+    this.props.updateInput("")
   }
 
   render() {
-    var messages = this.props[this.props.messageType + 's'][this.props.index]
-    var messageTitle;
-    var messagesList;
+    let messages = this.props[this.props.messageType + 's'][this.props.index]
+    console.log(messages)
+    let messageTitle;
+    let messagesList;
+    let messagesInput;
     if (messages) {
+      messagesInput = messages.input;
       messageTitle = messages['name'];
       messagesList = messages.messages.map((message) => 
         <div className="message-block">
@@ -75,15 +78,17 @@ class Messages extends Component {
     }
     
     return (
-      <div>
+      <div className="messages-side">
         <div className="messages-title">
-          {messageTitle}
+          {/* make the messageTitle a p so you can have an overflow cutoff. 
+            Also message block should have a different height based on messageType */}
+          {messageTitle} 
           {this.props.messageType === "channel" && <form onSubmit={this.addFriendToChannel} className="add-friend-to-channel">Add friend to channel<input value={this.state.channelEmail} onChange={(e) => {this.onChange(e, "channelEmail")}} type="email" placeholder="address@email.com"/></form>}
         </div>
         <div className="messages-block">
           {messagesList}
           <form onSubmit={this.onSubmit}>
-            <input type="text" value={this.state.messageInput} onChange={(e) => {this.onChange(e, "messageInput")}}/>
+            <input type="text" value={messagesInput} onChange={(e) => {this.props.updateInput(e.target.value)}}/>
             <input type="submit" value="submit"/>
           </form>
         </div>
