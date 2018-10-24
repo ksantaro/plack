@@ -52,6 +52,8 @@ class Main extends Component {
         if (!channelMessages) {
           channelMessages = [];
         }
+        console.log(channelMessages)
+        console.log(directMessages)
         this.setState({
           directMessages: directMessages,
           channels: channelMessages,

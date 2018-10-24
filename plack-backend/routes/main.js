@@ -61,8 +61,7 @@ router.get('/all/:uid', function(req, res, next) {
                                     FROM channels c, user_channels uc, users u, channel_messages cm, users u2
                                     WHERE $1 = uc.uid AND c.chid = uc.chid AND cm.chid = c.chid
                                         AND u.uid = c.creatorid AND cm.senderid = u2.uid
-                                    ORDER BY date desc    
-                                ) AS cms) AS cms
+                                    ORDER BY date ASC) AS cms) AS cms
                             GROUP BY name, chid
                             ORDER BY chid) AS s`,
                 values: [req.params.uid], //uid
