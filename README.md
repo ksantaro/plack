@@ -27,3 +27,9 @@ PostgreSQL Setup
 1. In folder  ./plack-backend
 2. npm install
 3. npm start
+
+Related Docs
+--------------
+[sequelize] (https://github.com/sequelize/express-example)
+
+
