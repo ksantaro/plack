@@ -16,7 +16,7 @@ PostgreSQL Setup
 2. create database with 'CREATE DATABASE plack;'
 3. create user with 'CREATE USER plack WITH PASSWORD 'plack;'
 4. grant privileges to user with 'GRANT ALL PRIVILEGES ON DATABASE plack to plack;'
-5. After running npm install in back end go into the folder ./plack-backend and run 'npm run set-tables' to add the tables to the database
+5. After running npm install in backend run in the backend node_modules/.bin/sequelize db:migrate
 
 ## How to run front end
 1. At root folder
