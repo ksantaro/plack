@@ -8,21 +8,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'user_id'
-        }
-      },
-      createdAt: {
+      name: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.STRING,
       },
-      updatedAt: {
+      is_channel: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.BOOLEAN,
       }
+      // chat_id: {
+      //   type: Sequelize.INTEGER,
+        // references: {
+        //   model: 'Chats',
+        //   key: 'chat_id'
+        // } 
+        // references: {
+        //   model: 'Chats',
+        //   key: 'chat_id'
+        // } Do not actually reference to have many to many relationship of chats(chat,users)
+      // },
     });
   },
   down: (queryInterface, Sequelize) => {

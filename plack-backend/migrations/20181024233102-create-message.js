@@ -13,7 +13,8 @@ module.exports = {
         references: {
           model: 'Chats',
           key: 'chat_id'
-        }
+        } 
+        //Do not actually reference to have many to many relationship of chats(chat,users)
       },
       sender_id: {
         type: Sequelize.INTEGER,
@@ -22,6 +23,23 @@ module.exports = {
           key: 'user_id'
         }
       },
+
+
+      // SENDER ID team_id and email
+      // team_id: {
+      //   type: Sequelize.INTEGER,
+      //   // references: {
+      //   //   model: 'Users',
+      //   //   key: 'team_id',
+      //   // }
+      // },
+      // email: {
+      //   type: Sequelize.STRING,
+      //   // references: {
+      //   //   model: 'Users',
+      //   //   key: 'email',
+      //   // }
+      // },
       text: {
         type: Sequelize.STRING
       },

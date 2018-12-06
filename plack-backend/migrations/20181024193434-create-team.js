@@ -9,8 +9,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       team_name: {
+        allowNull: false,
         type: Sequelize.STRING,
-        unique: true
+        // unique: true
+      },
+      team_description: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

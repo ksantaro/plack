@@ -31,5 +31,6 @@ PostgreSQL Setup
 Related Docs
 --------------
 [sequelize] (https://github.com/sequelize/express-example)
+ [sequlize migrations and seeders]           (http://docs.sequelizejs.com/manual/tutorial/migrations.html)
 
 
