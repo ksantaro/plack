@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    team_id: {
+    workspace_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Teams',
-        key: 'team_id'
+        model: 'Workspaces',
+        key: 'workspace_id'
       }
     },
     first_name: {
@@ -25,9 +25,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
         type: DataTypes.STRING,
-        validate: {
-            isEmail: true
-        }
     },
     password: {
         type: DataTypes.STRING,
@@ -43,9 +40,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   User.associate = function(models) {
     // associations can be defined here
-    User.belongsTo(models.Team, {
-      through: 'Team',
-      foreignKey: 'team_id'
+    User.belongsTo(models.Workspace, {
+      through: 'Workspace',
+      foreignKey: 'workspace_id'
     });
   };
   return User;

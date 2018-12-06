@@ -1,6 +1,6 @@
 'use strict';
 
-const teams = require('../seedersData/team.js');
+const workspaces = require('../seedersData/workspace.js');
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -8,7 +8,7 @@ module.exports = {
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
     */
-      return queryInterface.bulkInsert('Teams', teams, {});
+      return queryInterface.bulkInsert('Workspaces', workspaces, {});
   
   },
 
@@ -17,6 +17,6 @@ module.exports = {
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.
     */
-    return queryInterface.bulkDelete('Teams', null, {});  
+    return queryInterface.bulkDelete('Workspaces', null, {});  
   }
 };

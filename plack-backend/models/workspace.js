@@ -1,17 +1,17 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Team = sequelize.define('Team', {
-    team_id: {
+  const Workspace = sequelize.define('Workspace', {
+    workspace_id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    team_name: {
+    name: {
       type: DataTypes.STRING,
       // unique: true
     },
-    team_description: {
+    description: {
       type: DataTypes.STRING,
     },
     createdAt: {
@@ -23,8 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  Team.associate = function(models) {
+  Workspace.associate = function(models) {
     // associations can be defined here
   };
-  return Team;
+  return Workspace;
 };

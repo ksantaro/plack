@@ -3,12 +3,12 @@ const users = [];
 let user;
 let uniqueID;
 
-for (let teamID = 0; teamID < 5; teamID++) {
+for (let workspaceID = 0; workspaceID < 5; workspaceID++) {
     for (let num = 0; num < 6; num++) {
-        uniqueID = "10" + teamID + num;
+        uniqueID = "10" + workspaceID + num;
         user = {
             user_id: parseInt(uniqueID),
-            team_id: teamID,
+            workspace_id: workspaceID,
             first_name: "first name " + uniqueID,
             last_name: "last name " + uniqueID,
             username: 'username' + uniqueID,

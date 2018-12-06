@@ -1,19 +1,19 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Teams', {
-      team_id: {
+    return queryInterface.createTable('Workspaces', {
+      workspace_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      team_name: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING,
         // unique: true
       },
-      team_description: {
+      description: {
         type: Sequelize.STRING,
       },
       createdAt: {
@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Teams');
+    return queryInterface.dropTable('Workspaces');
   }
 };

@@ -14,11 +14,11 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    team_id: {
+    workspace_id: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'Teams',
-        key: 'team_id'
+        model: 'Workspaces',
+        key: 'workspace_id'
       }
     },
     first_name: {
