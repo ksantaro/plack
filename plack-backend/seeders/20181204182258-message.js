@@ -1,4 +1,6 @@
 'use strict';
+const messages = require('../seedersData/message.js');
+
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -12,6 +14,8 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
+    return queryInterface.bulkInsert('Messages', messages, {});
+
   },
 
   down: (queryInterface, Sequelize) => {
@@ -22,5 +26,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('Person', null, {});
     */
+    return queryInterface.bulkDelete('Messages', null, {});  
   }
 };
