@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     workspace_url: {
       allowNull: false,
       unique: true,
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     name: {
       type: DataTypes.STRING,
