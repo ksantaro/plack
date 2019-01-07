@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
+    workspace_url: {
+      allowNull: false,
+      unique: true,
+      type: Sequelize.STRING
+    },
     name: {
       type: DataTypes.STRING,
       // unique: true
