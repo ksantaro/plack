@@ -2,9 +2,13 @@ var models  = require('../models');
 var express = require('express');
 var router = express.Router();
 
+// var bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 var client = require('../postgres.js');
 var currentClient = client.getClient();
+
+// TODO hash passwords after most of the app implementation use bcrypt
 
 //GET all users
 router.get('/', function(req, res) {
@@ -22,6 +26,37 @@ router.get('/workspace/:workspace_id', function(req, res) {
   }).then(function(users) {
       res.json(users);
   });
+});
+
+//Post a new workspace with a new user
+// router.get('/', function(req, res) {
+
+// });
+
+router.post('/log-in', function(req, res) {
+	const { email, password, workspace_url } = req.body;
+	models.Workspace.findAll({
+		where: {
+			workspace_url: workspace_url
+		}
+	}).then(function(workspaces) {
+		console.log("WORKSPACES INFORMATION: LINE 45")
+			console.log(workspaces)
+			console.log("END")
+		const workspace_id = workspaces[0].id;
+		models.User.findAll({
+			where: {
+				workspace_id: workspace_id,
+				email: email,
+				password: password,
+			}
+		}).then(function(users) {
+			console.log("USERS INFORMATION: LINE 45")
+			console.log(users)
+			console.log("END")
+			res.json(users);
+		})
+	});
 });
 
 // OLD BACKEND
