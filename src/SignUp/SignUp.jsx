@@ -9,6 +9,9 @@ class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
+        workspace_url: '',
+        workspace_name: '',
+        description: '',
         firstName: '',
         lastName: '',
         username: '',
@@ -56,6 +59,10 @@ class SignUp extends Component {
             <h2>Sign Up</h2>
             <p>Enter your first name, last name, username, email address, and password</p>
             <form action="" onSubmit={this.onSubmit}>
+                <input type="text" placeholder="workspace url" value={this.state.workspace_url} onChange={(e) => {this.onChange(e, "workspace_url")}} required/>
+                <input type="text" placeholder="workspace name" value={this.state.workspace_name} onChange={(e) => {this.onChange(e, "workspace_name")}} required/>
+                <input type="text" placeholder="workspace description" value={this.state.description} onChange={(e) => {this.onChange(e, "description")}} required/>
+
                 <input type="text" placeholder="first name" value={this.state.firstName} onChange={(e) => {this.onChange(e, "firstName")}} required/>
                 <input type="text" placeholder="last name" value={this.state.lastName} onChange={(e) => {this.onChange(e, "lastName")}} required/>
                 <input type="text" placeholder="username" value={this.state.username} onChange={(e) => {this.onChange(e, "username")}} required/>
