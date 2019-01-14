@@ -10,6 +10,11 @@ var currentClient = client.getClient();
 
 // TODO hash passwords after most of the app implementation use bcrypt
 
+// Implementation Functions
+function createToken(user) {
+	return jwt.sign(_.omit(user, 'password'), "SecretJWTKEY1234@@@", {expiresInMinutes: 60*5});
+}
+
 //GET all users
 router.get('/', function(req, res) {
   models.User.findAll().then(function(users) {
@@ -33,29 +38,32 @@ router.get('/workspace/:workspace_id', function(req, res) {
 
 // });
 
-router.post('/log-in', function(req, res) {
+router.post('/login', function(req, res) {
 	const { email, password, workspace_url } = req.body;
+	console.log(workspace_url);
 	models.Workspace.findAll({
 		where: {
 			workspace_url: workspace_url
 		}
 	}).then(function(workspaces) {
-		console.log("WORKSPACES INFORMATION: LINE 45")
-			console.log(workspaces)
-			console.log("END")
-		const workspace_id = workspaces[0].id;
-		models.User.findAll({
-			where: {
-				workspace_id: workspace_id,
-				email: email,
-				password: password,
-			}
-		}).then(function(users) {
-			console.log("USERS INFORMATION: LINE 45")
-			console.log(users)
-			console.log("END")
-			res.json(users);
-		})
+		if(workspaces.length === 0) {
+			res.json("ERROR: workspace not found")
+		} else {
+			const workspace_id = workspaces[0].workspace_id;
+			models.User.findAll({
+				where: {
+					workspace_id: workspace_id,
+					email: email,
+					password: password,
+				}
+			}).then(function(users) {
+				if (users.length === 0) {
+					res.json("ERROR: email does not exist or password is incorrect");
+				} else {
+					res.json(users);
+				}
+			})
+		}
 	});
 });
 
