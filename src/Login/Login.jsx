@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Topbar from '../Topbar/Topbar';
+import { connect } from 'react-redux';
 
+
+//redux actions
+import {login} from '../actions/userActions';
 
 class Login extends Component {
   constructor(props) {
@@ -10,8 +14,12 @@ class Login extends Component {
         workspace_url: '',
         email: '',
         password: '',
-        error: false,
+        // error: false,
     }
+  }
+
+  componentDidMount() {
+    // remove error on refresh
   }
 
   onChange = (e, valueName) => {
@@ -21,6 +29,11 @@ class Login extends Component {
   }
 
   onSubmit = (e) => {
+    e.preventDefault();
+    // USE dispatch login then -> display error or redirect w/ token in localforage 
+    this.props.login(this.state.workspace_url, this.state.email, this.state.password).then(() => {
+      console.log(this.props.token);
+    })
     // axios.post('http://localhost:3010/users/log-in', {
     //   data: {
     //     workspace_url: this.state.workspace_url,
@@ -28,7 +41,6 @@ class Login extends Component {
     //     password: this.state.password
     //   }
     // });
-    e.preventDefault();
     // axios.post('http://localhost:3010/users/login', {
     //     data: {
     //       email: this.state.email,
@@ -58,6 +70,9 @@ class Login extends Component {
                 <input type="password" placeholder="password" value={this.state.password} onChange={(e) => {this.onChange(e, "password")}} required/>
                 <input type="submit" value="submit &#8594;" />
             </form>
+            <div>
+              {this.props.error.length !== 0 && this.props.error}
+            </div>
             <a href="./sign-up">don't have an account?</a>
         </div>
       </div>
@@ -65,4 +80,13 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+  token: state.user.token, //jwt token after login
+  error: state.user.error, //401 error if incorrect login cred
+})
+
+const mapDispatchToProps = dispatch => ({
+  login: (workspace_url, email, password) => dispatch(login(workspace_url, email, password)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

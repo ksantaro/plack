@@ -4,6 +4,8 @@ var router = express.Router();
 
 // var bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const _ = require('lodash/fp');
+
 
 var client = require('../postgres.js');
 var currentClient = client.getClient();
@@ -11,8 +13,40 @@ var currentClient = client.getClient();
 // TODO hash passwords after most of the app implementation use bcrypt
 
 // Implementation Functions
-function createToken(user) {
-	return jwt.sign(_.omit(user, 'password'), "SecretJWTKEY1234@@@", {expiresInMinutes: 60*5});
+// function createToken(user) {
+// 	return jwt.sign(_.omit(user, 'password'),
+// 	"SecretJWTKEY1234@@@", 
+// 	{expiresIn: 5*60*60},
+// 	(err, token) => {
+
+// 	}); // expires in 5 hours
+// }
+
+function vToken(token) {
+	jwt.verify(token, "SecretJWTKEY1234@@@");
+}
+
+//Format of token
+// Authorization: Bearer <access_token>
+
+function verifyToken(req, res, next) {
+	// get auth header value
+	const bearerHeader = req.headers['authorization'];
+	if(typeof bearerHeader !== 'undefined') {
+		const bearer = bearerHeader.split(' ');
+		const bearerToken = bearer[1];
+		req.token = bearerToken;
+		jwt.verify(req.token, "SecretJWTKEY1234@@@", (err, authData) => {
+			if (err) {
+				res.sendStatus(403);
+			} else {
+				req.authData = authData //get data in token
+				next();
+			}
+		});
+	} else {
+		res.sendStatus(403); //403 Forbidden
+	}
 }
 
 //GET all users
@@ -47,10 +81,12 @@ router.post('/login', function(req, res) {
 		}
 	}).then(function(workspaces) {
 		if(workspaces.length === 0) {
-			res.json("ERROR: workspace not found")
+			res.status(401).send('ERROR: workspace not found')
+			// res.json("ERROR: workspace not found")
 		} else {
 			const workspace_id = workspaces[0].workspace_id;
 			models.User.findAll({
+				attributes: ['user_id', 'workspace_id', 'username', 'email'],
 				where: {
 					workspace_id: workspace_id,
 					email: email,
@@ -58,12 +94,28 @@ router.post('/login', function(req, res) {
 				}
 			}).then(function(users) {
 				if (users.length === 0) {
-					res.json("ERROR: email does not exist or password is incorrect");
+					// res.json("ERROR: email does not exist or password is incorrect");
+					res.status(401).send('ERROR: email or password is incorrect');
 				} else {
-					res.json(users);
+					// res.json(users[0]);
+					const user = users[0];
+					jwt.sign({user},
+					"SecretJWTKEY1234@@@", 
+					{expiresIn: "6h"},
+					(err, token) => {
+						res.json({token});
+					}); // expires in 5 hours
 				}
 			})
 		}
+	});
+});
+
+//can become a middle ware to check it is verified !!!!!!!!
+router.get('/isAuthenticated', verifyToken, function(req,res) {
+	res.json({
+		isAuthenticated: true,
+		authData: req.authData
 	});
 });
 

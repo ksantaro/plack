@@ -5,19 +5,41 @@ import Login from './Login/Login';
 import Main from './Main/Main';
 import {Route} from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './store.js';
+import storeFunc from './store.js';
+// import persistor from './store.js';
+import {persistStore} from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react';
 
+const storeConfig = storeFunc();
+const store = storeConfig.store;
+const persistor = storeConfig.persistor;
 
 class App extends Component {
+  // state = {
+  //   isReady: false,
+  // }
+
+  // componentDidMount() {
+  //   persistStore(store, 
+  //     {
+  //       storage: AsyncStorage,
+  //     },
+  //     () => {
+  //       this.setState({ isReady: true})
+  //     })
+  // }
+
   render() {
     return (
       <Provider store={store}>
-        <div className="App">
-          <Route path="/sign-up" component={SignUp} />
-          <Route path="/login" component={Login} />
-          <Route exact path="/" component={Login} />
-          <Route path="/main" component={Main} />
-        </div>
+        <PersistGate loading={null} persistor={persistor}>
+          <div className="App">
+            <Route path="/sign-up" component={SignUp} />
+            <Route path="/login" component={Login} />
+            <Route exact path="/" component={Login} />
+            <Route path="/main" component={Main} />
+          </div>
+        </PersistGate>
       </Provider>
     );
   }
