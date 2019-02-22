@@ -1,16 +1,25 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Teams', {
-      team_id: {
+    return queryInterface.createTable('Workspaces', {
+      workspace_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      team_name: {
+      workspace_url: {
+        allowNull: false,
+        unique: true,
+        type: Sequelize.STRING
+      },
+      name: {
+        allowNull: false,
         type: Sequelize.STRING,
-        unique: true
+        // unique: true
+      },
+      description: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -23,6 +32,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Teams');
+    return queryInterface.dropTable('Workspaces');
   }
 };

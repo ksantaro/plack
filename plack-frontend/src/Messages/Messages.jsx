@@ -82,7 +82,7 @@ class Messages extends Component {
         <div className="messages-title">
           {/* make the messageTitle a p so you can have an overflow cutoff. 
             Also message block should have a different height based on messageType */}
-          {messageTitle} 
+          {messageTitle}
           {this.props.messageType === "channel" && <form onSubmit={this.addFriendToChannel} className="add-friend-to-channel">Add friend to channel<input value={this.state.channelEmail} onChange={(e) => {this.onChange(e, "channelEmail")}} type="email" placeholder="address@email.com"/></form>}
         </div>
         <div className="messages-block">
