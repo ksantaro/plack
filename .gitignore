@@ -1,14 +1,14 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+/plack-frontend/node_modules
 /plack-backend/node_modules
 
 # testing
-/coverage
+/plack-frontend/coverage
 
 # production
-/build
+/plack-frontend/build
 
 # misc
 .DS_Store
@@ -20,3 +20,13 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/plack-frontend/.DS_Store
+/plack-frontend/.env.local
+/plack-frontend/.env.development.local
+/plack-frontend/.env.test.local
+/plack-frontend/.env.production.local
+
+/plack-frontend/npm-debug.log*
+/plack-frontend/yarn-debug.log*
+/plack-frontend/yarn-error.log*
