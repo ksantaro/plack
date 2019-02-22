@@ -7,12 +7,13 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'Users',
-        key: 'user_id'
-      }
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    is_channel: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
     },
     createdAt: {
       allowNull: false,

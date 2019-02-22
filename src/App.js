@@ -3,6 +3,8 @@ import './App.css';
 import SignUp from './SignUp/SignUp';
 import Login from './Login/Login';
 import Main from './Main/Main';
+import Workspace from './components/Workspace';
+
 import {Route} from 'react-router-dom';
 import { Provider } from 'react-redux';
 import storeFunc from './store.js';
@@ -38,6 +40,7 @@ class App extends Component {
             <Route path="/login" component={Login} />
             <Route exact path="/" component={Login} />
             <Route path="/main" component={Main} />
+            <Route path='/workspace/:workspace_id' component={Workspace} />
           </div>
         </PersistGate>
       </Provider>

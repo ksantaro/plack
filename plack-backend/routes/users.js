@@ -12,16 +12,6 @@ var currentClient = client.getClient();
 
 // TODO hash passwords after most of the app implementation use bcrypt
 
-// Implementation Functions
-// function createToken(user) {
-// 	return jwt.sign(_.omit(user, 'password'),
-// 	"SecretJWTKEY1234@@@", 
-// 	{expiresIn: 5*60*60},
-// 	(err, token) => {
-
-// 	}); // expires in 5 hours
-// }
-
 function vToken(token) {
 	jwt.verify(token, "SecretJWTKEY1234@@@");
 }
@@ -33,14 +23,14 @@ function verifyToken(req, res, next) {
 	// get auth header value
 	const bearerHeader = req.headers['authorization'];
 	if(typeof bearerHeader !== 'undefined') {
-		const bearer = bearerHeader.split(' ');
+		const bearer = bearerHeader.split(' '); //Header comes as 'Bearer [Token]'
 		const bearerToken = bearer[1];
 		req.token = bearerToken;
-		jwt.verify(req.token, "SecretJWTKEY1234@@@", (err, authData) => {
+		jwt.verify(req.token, "SecretJWTKEY1234@@@", (err, userData) => {
 			if (err) {
-				res.sendStatus(403);
+				res.sendStatus(403); //403 Forbidden
 			} else {
-				req.authData = authData //get data in token
+				req.userData = userData //get data in token
 				next();
 			}
 		});
@@ -90,7 +80,7 @@ router.post('/login', function(req, res) {
 				where: {
 					workspace_id: workspace_id,
 					email: email,
-					password: password,
+					password: password, //can remove this and validate later //to seperate email error and password error
 				}
 			}).then(function(users) {
 				if (users.length === 0) {
@@ -103,8 +93,8 @@ router.post('/login', function(req, res) {
 					"SecretJWTKEY1234@@@", 
 					{expiresIn: "6h"},
 					(err, token) => {
-						res.json({token});
-					}); // expires in 5 hours
+						res.json({token}); //needs to contain auth data
+					}); 
 				}
 			})
 		}
@@ -115,9 +105,13 @@ router.post('/login', function(req, res) {
 router.get('/isAuthenticated', verifyToken, function(req,res) {
 	res.json({
 		isAuthenticated: true,
-		authData: req.authData
+		userData: req.userData
 	});
 });
+
+// router.get('/current-user', verifyToken, function(req,res) {
+
+// });
 
 // OLD BACKEND
 // router.post('/login', function(req, res, next) {

@@ -33,6 +33,8 @@ for (let x = 0; x < 31; x++) {
         chat_id: chat_id,
         name: "me",
         is_channel: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
     }
     chat_id++;
     chats.push(chat);
@@ -47,6 +49,8 @@ for (let x = 0; x < 5; x++) {
             chat_id: chat_id,
             name: "", // empty means that the chat name will need to be the others in chat
             is_channel: false,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         }
     // }
     chat_id++;
@@ -61,6 +65,8 @@ for (let x = 0; x < 5; x++) {
             chat_id: chat_id,
             name: "Channel " + x,
             is_channel: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         }
     // }
     chat_id++;

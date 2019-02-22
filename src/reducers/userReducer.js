@@ -3,9 +3,10 @@ import * as UserActions from '../actions/userActions';
 import { userInfo } from 'os';
 
 const initialState = {
-  tokenData: null,
+  userData: null,
   token: '',
   error: '',
+  isAuthenticated: false,
 }
 
 export default function(state=initialState, action) {
@@ -20,6 +21,19 @@ export default function(state=initialState, action) {
         error: '',
       };
     case UserActions.LOGIN_ERROR:
+      return {
+        ...state,
+        error: action.payload.error,
+      }
+
+    //GET CURRENT USER
+    case UserActions.GET_CURRENT_USER_SUCCESS:
+      return {
+        ...state,
+        userData: action.payload.userData,
+        isAuthenticated: action.payload.isAuthenticated,
+      }
+    case UserActions.GET_CURRENT_USER_ERROR:
       return {
         ...state,
         error: action.payload.error,
