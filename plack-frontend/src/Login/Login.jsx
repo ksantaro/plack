@@ -55,7 +55,7 @@ class Login extends Component {
           this.props.getCurrentUser(this.props.token)
             .then(() => {
               console.log(this.props.userData);
-              console.log(this.props.history.push(`/workspace/${this.props.userData.user_id}`)); //redirects but perserves the history stack
+              this.props.history.push(`/workspace/${this.props.userData.user_id}`); //redirects but perserves the history stack
               // this.props.setRedirectComponent(`/workspace/${this.props.userData.user_id}`);
             // this.setRedirect(`/workspace/${this.props.match.params.workspace_id}`)
             });

@@ -6,6 +6,8 @@ var router = express.Router();
 const jwt = require('jsonwebtoken');
 const _ = require('lodash/fp');
 
+const verifyToken = require('./verifyToken');
+
 
 var client = require('../postgres.js');
 var currentClient = client.getClient();
@@ -19,25 +21,25 @@ function vToken(token) {
 //Format of token
 // Authorization: Bearer <access_token>
 
-function verifyToken(req, res, next) {
-	// get auth header value
-	const bearerHeader = req.headers['authorization'];
-	if(typeof bearerHeader !== 'undefined') {
-		const bearer = bearerHeader.split(' '); //Header comes as 'Bearer [Token]'
-		const bearerToken = bearer[1];
-		req.token = bearerToken;
-		jwt.verify(req.token, "SecretJWTKEY1234@@@", (err, userData) => {
-			if (err) {
-				res.sendStatus(403); //403 Forbidden
-			} else {
-				req.userData = userData //get data in token
-				next();
-			}
-		});
-	} else {
-		res.sendStatus(403); //403 Forbidden
-	}
-}
+// function verifyToken(req, res, next) {
+// 	// get auth header value
+// 	const bearerHeader = req.headers['authorization'];
+// 	if(typeof bearerHeader !== 'undefined') {
+// 		const bearer = bearerHeader.split(' '); //Header comes as 'Bearer [Token]'
+// 		const bearerToken = bearer[1];
+// 		req.token = bearerToken;
+// 		jwt.verify(req.token, "SecretJWTKEY1234@@@", (err, userData) => {
+// 			if (err) {
+// 				res.sendStatus(403); //403 Forbidden
+// 			} else {
+// 				req.userData = userData //get data in token
+// 				next();
+// 			}
+// 		});
+// 	} else {
+// 		res.sendStatus(403); //403 Forbidden
+// 	}
+// }
 
 //GET all users
 router.get('/', function(req, res) {
