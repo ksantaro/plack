@@ -39,8 +39,8 @@ class App extends Component {
         <PersistGate loading={null} persistor={persistor}>
           <div className="App">
             {/* <Route path="/sign-up" component={SignUp} /> */}
-            <Route path="/" component={EntryComponent} />
-            {/* <Route path="/workspace" component={Workspace} /> */}
+            <Route path="/u" component={EntryComponent} />
+            <Route path="/workspace/:workspace_url/messages/:id" component={Workspace} />
             {/* <Route exact path="/" component={Login} /> */}
             {/* <Route path="/main" component={Main} /> */}
             {/* <Route path='/workspace/:workspace_id' component={Workspace} /> */}

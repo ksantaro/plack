@@ -363,14 +363,23 @@ body {
 
 .sidebar .title-box {
   background-color: #394750;
+  padding: 18px 0px;
 }
 
 .sidebar .title-box h3 {
   color: #ffffff;
   margin: 0px;
-  padding: 18px 0px;
   padding-left: 22px;
   font-size: 20px;
+}
+
+.sidebar .title-box h5 {
+  margin: 0;
+  margin-top: 2px;
+  padding-left: 22px;
+  font-size: 16px;
+  color: rgba(245,243,245,.55);
+  font-weight: 100;
 }
 
 .sidebar ul {
@@ -380,13 +389,30 @@ body {
   padding: 0;
 }
 
-.sidebar ul li .nav-item {
+.sidebar ul.workspace-chat {
+  margin-top: 0;
+}
+
+.sidebar ul li .nav-item, 
+.nav-heading {
   padding: 6px 0;
   padding-left: 22px;
   color: rgba(245,243,245,.55);
   font-weight: 100;
   text-decoration: none;
   display: block;
+}
+
+.sidebar ul li .nav-item .nav-width {
+  display: block;
+  white-space: nowrap;
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-heading {
+  margin-top: 18px;
 }
 
 .sidebar ul li .nav-item:hover {

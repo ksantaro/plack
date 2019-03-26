@@ -10,21 +10,21 @@ import CreateWorkspace from './FormComponents/CreateWorkspace';
 // path matches the current URL.
 const routes = [
   {
-    path: "/",
+    path: "/u",
     exact: true,
     sidebar: () => <div>home!</div>,
     main: () => <Login />,
     name: () => <h2>Login</h2>,
   },
   {
-    path: "/sign-up",
+    path: "/u/sign-up",
     exact: true,
     sidebar: () => <div>bubblegum!</div>,
     main: () => <SignUp />,
     name: () => <h2>Sign Up</h2>,
   },
   {
-    path: "/create-workspace",
+    path: "/u/create-workspace",
     exact: true,
     sidebar: () => <div>shoelaces!</div>,
     main: () => <CreateWorkspace />,
@@ -43,13 +43,13 @@ function MainLayout() {
           </div>
           <ul>
             <li>
-              <NavLink to="/" activeClassName="nav-active" exact className="nav-item">Login</NavLink>
+              <NavLink to="/u" activeClassName="nav-active" exact className="nav-item">Login</NavLink>
             </li>
             <li>
-              <NavLink to="/sign-up" activeClassName="nav-active" className="nav-item">Sign up</NavLink>
+              <NavLink to="/u/sign-up" activeClassName="nav-active" className="nav-item">Sign up</NavLink>
             </li>
             <li>
-              <NavLink to="/create-workspace" activeClassName="nav-active" className="nav-item">Create Workspace</NavLink>
+              <NavLink to="/u/create-workspace" activeClassName="nav-active" className="nav-item">Create Workspace</NavLink>
             </li>
           </ul>
 

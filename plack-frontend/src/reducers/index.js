@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import chatReducer from './chatReducer';
+import workspaceReducer from './workspaceReducer';
 import userReducer from './userReducer';
 import redirectReducer from './redirectReducer';
 
 export default combineReducers({
-  chats: chatReducer,
+  workspace: workspaceReducer,
   user: userReducer,
   redirect: redirectReducer,
 })
