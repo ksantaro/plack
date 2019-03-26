@@ -4,6 +4,7 @@ import SignUp from './SignUp/SignUp';
 import Login from './Login/Login';
 import Main from './Main/Main';
 import Workspace from './components/Workspace';
+import EntryComponent from './components/EntryComponent';
 
 import {Route} from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -36,11 +37,11 @@ class App extends Component {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <div className="App">
-            <Route path="/sign-up" component={SignUp} />
-            <Route path="/login" component={Login} />
-            <Route exact path="/" component={Login} />
-            <Route path="/main" component={Main} />
-            <Route path='/workspace/:workspace_id' component={Workspace} />
+            {/* <Route path="/sign-up" component={SignUp} /> */}
+            <Route path="/" component={EntryComponent} />
+            {/* <Route exact path="/" component={Login} /> */}
+            {/* <Route path="/main" component={Main} /> */}
+            {/* <Route path='/workspace/:workspace_id' component={Workspace} /> */}
           </div>
         </PersistGate>
       </Provider>

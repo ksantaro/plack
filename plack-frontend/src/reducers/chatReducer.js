@@ -27,6 +27,13 @@ directMessages: [
   ...
 ]
 
+maybe do it like this with a key to organize the different chats, 
+try the normal way first because on click you can retrive the id
+
+chat_id: {
+  id,name,messages
+}
+
 when adding a channel, return sorted channels and update. Same with DMs.
 when adding a message, make a call to backend, return the new message and add it to messages
 */
