@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"; //delete after
-import WorkspaceURL from './WorkspaceURL';
-import SignIn from './SignIn';
+import WorkspaceURL from './Views/WorkspaceURL';
+import SignIn from './Views/SignIn';
 
 class Login extends Component {
   constructor(props) {
@@ -11,6 +11,11 @@ class Login extends Component {
       username: "",
       password: "",
       view_number: 1,
+      errors: {
+        workspace_url: null,
+        username: null,
+        password: null,
+      },
     }
   }
 
@@ -45,30 +50,32 @@ class Login extends Component {
   }
 
   render() {
-    let login_view;
+    let view;
 
     switch(this.state.view_number) {
       case 1:
-        login_view = <WorkspaceURL
+        view = <WorkspaceURL
             workspace_url={this.state.workspace_url}
             onChange={this.onChange}
             onSubmit={this.confirmWorkspaceURL}
+            errors={this.state.errors}
           />
         break;
       case 2:
-        login_view = <SignIn
+        view = <SignIn
             workspace_url={this.state.workspace_url}
             username={this.state.username}
             password={this.state.password}
             onChange={this.onChange}
             onSubmit={this.submitLogin}
+            errors={this.state.errors}
           />
       default:
         console.log("no view selected");
     }
     return (
       <div>
-        {login_view}
+        {view}
       </div>
       
     );

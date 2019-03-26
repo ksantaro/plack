@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"; //delete after
+import FormInput from '../../CommonComponents/FormInput';
 
 
 class WorkspaceURL extends Component {
@@ -15,7 +16,7 @@ class WorkspaceURL extends Component {
           does not have a workspace, 
           create one <Link to="/create-workspace">here.</Link>
         </div>
-        <input placeholder="WORKSPACE-URL" name="workspace_url" value={this.props.workspace_url} onChange={this.props.onChange} required/>
+        <FormInput placeholder="WORKSPACE-URL" name="workspace_url" value={this.props.workspace_url} onChange={this.props.onChange} required error={this.props.errors.workspace_url}/>
         <button>Next</button>
       </form>
     );

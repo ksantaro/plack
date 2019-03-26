@@ -414,7 +414,7 @@ body {
 
 .form-description {
   color: #605F5F;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   line-height: 22px;
   font-size: 16px;
   font-weight: bold;
@@ -433,7 +433,30 @@ body {
   border-radius: 5px;
   font-size: 16px;
   padding-left: 12px;
-  margin-bottom: 30px;
+  margin-top: 30px;
+  display: inline-block;
+}
+
+.form-input {
+  position: relative;
+  display: block;
+}
+
+input.form-error-input {
+  border-color: #E24444;
+}
+
+.form-error-input-icon {
+  margin-left: 20px;
+  background-color: #E24444;
+  color: #F7F6F6;
+  padding: 2px 8px;
+  border-radius: 18px;
+}
+
+.form-error-message {
+  margin-top: 15px;
+  color: #E24444;
   display: block;
 }
 
@@ -446,7 +469,7 @@ body {
 .form-container button {
   cursor: pointer;
   display: block;
-  /* margin-top: 30px; */
+  margin-top: 30px;
   margin-bottom: 10px;
   background-color: #4553A0;
   border: none;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"; //delete after
-import WorkspaceURL from './WorkspaceURL';
-import CreateUser from './CreateUser';
+import WorkspaceURL from './Views/WorkspaceURL';
+import CreateUser from './Views/CreateUser';
 
 class Login extends Component {
   constructor(props) {
@@ -13,6 +13,13 @@ class Login extends Component {
       password: "",
       confirm_password: "",
       view_number: 1,
+      errors: {
+        workspace_url: null,
+        username: null,
+        email: null,
+        password: null,
+        confirm_password: null,
+      },
     }
   }
 
@@ -27,8 +34,6 @@ class Login extends Component {
   }
 
   onChange = (e) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
     this.setState({
       [e.target.name]: e.target.value
     })
@@ -44,21 +49,34 @@ class Login extends Component {
 
   submitNewUser = (e) => {
     e.preventDefault();
+    this.passwordsMatch();
+  }
+
+  passwordsMatch = () => {
+    if(this.state.password !== this.state.confirm_password) {
+      this.setState({
+        errors: {
+            ...this.state.errors,
+            confirm_password: "The passwords do not match."
+          }
+      });
+    }
   }
 
   render() {
-    let login_view;
+    let view;
 
     switch(this.state.view_number) {
       case 1:
-        login_view = <WorkspaceURL
+        view = <WorkspaceURL
             workspace_url={this.state.workspace_url}
             onChange={this.onChange}
             onSubmit={this.confirmWorkspaceURL}
+            errors={this.state.errors}
           />
         break;
       case 2:
-        login_view = <CreateUser
+        view = <CreateUser
             workspace_url={this.state.workspace_url}
             username={this.state.username}
             email={this.state.email}
@@ -66,13 +84,14 @@ class Login extends Component {
             confirm_password={this.state.confirm_password}
             onChange={this.onChange}
             onSubmit={this.submitNewUser}
+            errors={this.state.errors}
           />
       default:
         console.log("no view selected");
     }
     return (
       <div>
-        {login_view}
+        {view}
       </div>
       
     );

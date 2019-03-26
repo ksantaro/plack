@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import Login from './FormComponents/Login';
 import SignUp from './FormComponents/SignUp';
+import CreateWorkspace from './FormComponents/CreateWorkspace';
 
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
@@ -9,7 +10,7 @@ import SignUp from './FormComponents/SignUp';
 // path matches the current URL.
 const routes = [
   {
-    path: "/login",
+    path: "/",
     exact: true,
     sidebar: () => <div>home!</div>,
     main: () => <Login />,
@@ -17,14 +18,16 @@ const routes = [
   },
   {
     path: "/sign-up",
+    exact: true,
     sidebar: () => <div>bubblegum!</div>,
-    main: () => <h2>Bubblegum</h2>,
+    main: () => <SignUp />,
     name: () => <h2>Sign Up</h2>,
   },
   {
     path: "/create-workspace",
+    exact: true,
     sidebar: () => <div>shoelaces!</div>,
-    main: () => <h2>Shoelaces</h2>,
+    main: () => <CreateWorkspace />,
     name: () => <h2>Create Workspace</h2>,
   }
 ];
@@ -40,7 +43,7 @@ function MainLayout() {
           </div>
           <ul>
             <li>
-              <NavLink to="/login" activeClassName="nav-active" className="nav-item">Login</NavLink>
+              <NavLink to="/" activeClassName="nav-active" exact className="nav-item">Login</NavLink>
             </li>
             <li>
               <NavLink to="/sign-up" activeClassName="nav-active" className="nav-item">Sign up</NavLink>
@@ -70,8 +73,7 @@ function MainLayout() {
         <div className="main">
           <div>
             {routes.map((route, index) => (
-              // Render more <Route>s with the same paths as
-              // above, but different components this time.
+              // Render Routes Tilte
               <Route
                 key={index}
                 path={route.path}

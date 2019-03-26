@@ -3,8 +3,9 @@ import './App.css';
 import SignUp from './SignUp/SignUp';
 import Login from './Login/Login';
 import Main from './Main/Main';
-import Workspace from './components/Workspace';
+// import Workspace from './components/Workspace';
 import EntryComponent from './components/EntryComponent';
+import Workspace from './components/Workspace';
 
 import {Route} from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -39,6 +40,7 @@ class App extends Component {
           <div className="App">
             {/* <Route path="/sign-up" component={SignUp} /> */}
             <Route path="/" component={EntryComponent} />
+            {/* <Route path="/workspace" component={Workspace} /> */}
             {/* <Route exact path="/" component={Login} /> */}
             {/* <Route path="/main" component={Main} /> */}
             {/* <Route path='/workspace/:workspace_id' component={Workspace} /> */}
