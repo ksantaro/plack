@@ -340,6 +340,7 @@ body {
   height: 100%;
   overflow: auto;
   width: calc(100% - 250px);
+  position: relative;
 }
 
 .main h2 {
@@ -352,12 +353,64 @@ body {
 
 /* Chat */
 .workspace-messages {
+  position: absolute;
+  top: 60px;
   padding-top: 20px;
+  overflow: auto;
+  max-height: calc(100% - 140px); /* 140px top: 60px plus the workspace-input-container height in this style*/
+}
+
+.workspace-messages:hover {
+  /* overflow-y: scroll; */
 }
 
 .workspace-message {
   padding-left: 30px;
+  padding-right: 40px;
+  margin-bottom: 35px;
+}
+
+.workspace-message-sender-name {
+  font-weight: bold;
+  font-size: 16px;
+  margin-right: 12px;
+}
+
+.workspace-message-timestamp {
+  font-size: 14px;
+  color: #7C7C7C;
+}
+
+.workspace-message-text {
+  margin-top: 5px;
+  font-size: 15px;
+}
+
+.workspace-input-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #f7f6f6;
+}
+
+.workspace-input-position {
+  padding-left: 30px;
   padding-right: 60px;
+  padding-bottom: 20px;
+}
+
+.workspace-input-container input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid #A3A1A1;
+  font-size: 16px;
+  padding: 10px;
+  outline-color: #000000;
+  outline-width: thin;
+}
+
+.workspace-input-container input::placeholder {
+  color: #A3A1A1;
 }
 
 

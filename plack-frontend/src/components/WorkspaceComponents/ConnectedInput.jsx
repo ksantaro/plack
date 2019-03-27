@@ -9,6 +9,7 @@ class ConnectedInput extends Component {
     // const type = this.props.isChannel ? "channels" : "directMessages";
     this.props.changeInput(id, e.target.value)
   }
+  //maybe add a send button
 
   render() {
     const type = this.props.chatSelected.type;
@@ -16,7 +17,11 @@ class ConnectedInput extends Component {
     const chat = this.props[`${type}s`][index];
 
     return(
-        <input value={this.props.preservedInputs[chat.id]} onChange={(e) => this.onChange(e, chat.id)}/>
+      <div className="workspace-input-container">
+        <div className="workspace-input-position">
+          <input placeholder="Type to send a message" value={this.props.preservedInputs[chat.id]} onChange={(e) => this.onChange(e, chat.id)}/>
+        </div>
+      </div>
     );
   }
 }

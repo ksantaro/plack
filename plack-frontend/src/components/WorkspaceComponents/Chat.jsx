@@ -4,6 +4,22 @@ import { connect } from 'react-redux';
 import { changeInput } from '../../actions/workspaceActions';
 
 class Chat extends Component {
+  scrollToBottomAuto = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "auto"});
+  }
+
+  scrollToBottomSmooth = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  }
+
+  componentDidMount() {
+    this.scrollToBottomAuto();
+  }
+  
+  componentDidUpdate() {
+    this.scrollToBottomSmooth();
+  }
+
   render() {
     // console.log(this.props.chatObject.input);
     // console.log("chat rendered")
@@ -22,6 +38,9 @@ class Chat extends Component {
               return <Message message={message} key={`messageKey${index}`}/>
             })
           }
+          <div className="workspace-messages-end" style={{ float:"left", clear: "both" }}
+              ref={(el) => { this.messagesEnd = el; }}>
+          </div>
         </div>
         {/* <input value={this.props.preservedInputs[chat.id]} onChange={(e) => this.onChange(e, chat.id)}/> */}
       </div>
