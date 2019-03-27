@@ -131,14 +131,53 @@ chat_id: {
 when adding a channel, return sorted channels and update. Same with DMs.
 when adding a message, make a call to backend, return the new message and add it to messages
 */
+
+const preservedInputs = {}
+
+
+//both are just chats, so ids will not collide
+for (let channel of placeholderChannels) {
+  console.log(channel.id);
+  preservedInputs[channel.id] = "";
+}
+
+for (let directMessage of placeholderDirectMessages) {
+  preservedInputs[directMessage.id] = "";
+}
+
 const initialState = {
   channels: placeholderChannels,
   directMessages: placeholderDirectMessages,
+  chatSelected: {
+    type: "directMessage",
+    index: 0,
+  },
+  preservedInputs
 }
 
 export default function(state=initialState, action) {
   switch(action.type) {
-    case WorkspaceActions.ON_CHANGE:
+    case WorkspaceActions.ON_SELECT:
+      return {
+        ...state,
+        chatSelected: {
+          type: action.payload.type,
+          index: action.payload.index,
+        }
+      }
+      break;
+    case WorkspaceActions.CHANGE_INPUT:
+      console.log(action.payload.id);
+      console.log(action.payload.text);
+      console.log(state['preservedInputs']);
+      return {
+        ...state,
+        preservedInputs: {
+          ...state['preservedInputs'],
+          [action.payload.id]: action.payload.text,
+        }
+      }
+      break;
       // console.log(action.payload);  
       // const stateCopy = Object.assign({}, state); // Will this make the program run slow?
       // const chatCopy = 
@@ -152,9 +191,9 @@ export default function(state=initialState, action) {
       // console.log(chatArrayCopy);
       // chatArrayCopy[action.payload.index].input = action.payload.inputText;
       // console.log(chatArrayCopy);
-      return {
-        ...state,
-        [action.payload.type]: [...state[action.payload.type]]
+      // return {
+      //   ...state,
+      //   [action.payload.type]: [...state[action.payload.type]]
 
         // [action.payload.type]: chatArrayCopy,
 
@@ -170,7 +209,7 @@ export default function(state=initialState, action) {
         //   input: messagesCopy,
         // },
         // [action.payload.type][action.payload.index]: action.payload.inputText,
-      }
+      // }
     default:
       return state;    
   }

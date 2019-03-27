@@ -4,13 +4,17 @@ export const NEW_CHAT = "NEW_CHAT";
 const apiHost = "http://localhost:3010" //change on development type
 
 
-export const ON_CHANGE = "ON_CHANGE";
+export const CHANGE_INPUT = "CHANGE_INPUT";
 
-export const onChange = (inputText, index, type) => ({
-  type: ON_CHANGE,
-  payload: {inputText, index, type}
+export const changeInput = (id, text) => ({
+  type: CHANGE_INPUT,
+  payload: {id, text}
 });
 
-export const changeInput = (inputText, index, type) => (dispatch, getState) => {
-  dispatch(onChange(inputText, index, type));
-}
+
+export const ON_SELECT = "ON_SELECT";
+
+export const onSelect = (e, chat) => ({
+  type: ON_SELECT,
+  payload: {type: chat.type, index: chat.index},
+})
