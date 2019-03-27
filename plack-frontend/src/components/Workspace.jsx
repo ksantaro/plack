@@ -4,6 +4,10 @@ import Login from './FormComponents/Login';
 import SignUp from './FormComponents/SignUp';
 import CreateWorkspace from './FormComponents/CreateWorkspace';
 import { connect } from 'react-redux';
+import Chat from './WorkspaceComponents/Chat';
+
+// import {changeInput} from '../actions/workspaceActions';
+
 
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
@@ -12,29 +16,33 @@ import { connect } from 'react-redux';
 
 class Workspace extends Component {
   render() {
-    const routes = [
-      {
-        path: `/workspace/${this.props.match.params.workspace_url}/messages/${this.props.match.params.id}`,
+    //combine routes for channels and messages
+    const routes = this.props.channels.map((channel, index) => { 
+      return {
+        path: `/workspace/${this.props.match.params.workspace_url}/messages/${channel.id}`,
         exact: true,
-        sidebar: () => <div>home!</div>,
-        main: () => <Login />,
-        name: () => <h2>Login</h2>,
-      },
-      {
-        path: "/workspace/sign-up",
-        exact: true,
-        sidebar: () => <div>bubblegum!</div>,
-        main: () => <SignUp />,
-        name: () => <h2>Sign Up</h2>,
-      },
-      {
-        path: "/workspace/create-workspace",
-        exact: true,
-        sidebar: () => <div>shoelaces!</div>,
-        main: () => <CreateWorkspace />,
-        name: () => <h2>Create Workspace</h2>,
+        main: () => <Chat 
+                      chatObject={channel} 
+                      isChannel 
+                      index={index} 
+                      changeInput={this.props.changeInput} 
+                      key={`channelKey${channel.id}`}
+                    />
       }
-    ];
+    }).concat(
+      this.props.directMessages.map((directMessage, index) => {
+        return {
+          path: `/workspace/${this.props.match.params.workspace_url}/messages/${directMessage.id}`,
+          exact: true,
+          main: () => <Chat 
+                        chatObject={directMessage}
+                        index={index}
+                        changeInput={this.props.changeInput}
+                        key={`directMessageKey${directMessage.id}`}
+                      />
+        }
+      }));
+      console.log("workspace render")
 
     return (
       <Router>
@@ -49,7 +57,7 @@ class Workspace extends Component {
             <ul className="workspace-chat">
               {
                 this.props.channels.map((channel, index) => {
-                  return (<li>
+                  return (<li key={`channelLinkKey${channel.id}`}>
                             <NavLink to={`/workspace/${this.props.match.params.workspace_url}/messages/${channel.id}`} activeClassName="nav-active" exact className="nav-item">
                               <span className="nav-width">
                                 # {channel.name}
@@ -63,7 +71,7 @@ class Workspace extends Component {
             <ul className="workspace-chat">
               {
                 this.props.directMessages.map((directMessage, index) => {
-                  return (<li>
+                  return (<li key={`directMessageLinkKey${directMessage.id}`}>
                             <NavLink to={`/workspace/${this.props.match.params.workspace_url}/messages/${directMessage.id}`} activeClassName="nav-active" exact className="nav-item">
                               <span className="nav-width">
                                 @ {directMessage.name}
@@ -120,19 +128,21 @@ class Workspace extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  channels: state.workspace.channels,
-  directMessages: state.workspace.directMessages,
-  // token: state.user.token, //jwt token after login
-  // error: state.user.error, //401 error if incorrect login cred
-  // userData: state.user.userData,
-  // redirectComponent: state.redirect.redirectComponent
-})
+// const mapStateToProps = state => ({
+//   channels: state.workspace.channels,
+//   directMessages: state.workspace.directMessages,
+//   // token: state.user.token, //jwt token after login
+//   // error: state.user.error, //401 error if incorrect login cred
+//   // userData: state.user.userData,
+//   // redirectComponent: state.redirect.redirectComponent
+// })
 
-const mapDispatchToProps = dispatch => ({
-  // login: (workspace_url, email, password) => dispatch(login(workspace_url, email, password)),
-  // getCurrentUser: (token) => dispatch(getCurrentUser(token)),
-  // setRedirectComponent: (redirectLink) => dispatch(setRedirectComponent(redirectLink)),
-});
+// const mapDispatchToProps = dispatch => ({
+//   changeInput: (inputText, index, type) => dispatch(changeInput(inputText, index, type)),
+//   // login: (workspace_url, email, password) => dispatch(login(workspace_url, email, password)),
+//   // getCurrentUser: (token) => dispatch(getCurrentUser(token)),
+//   // setRedirectComponent: (redirectLink) => dispatch(setRedirectComponent(redirectLink)),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Workspace);
+export default Workspace;
+// export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

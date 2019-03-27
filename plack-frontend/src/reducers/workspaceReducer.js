@@ -1,10 +1,13 @@
-import {FETCH_CHATS, NEW_CHAT} from '../actions/chatActions';
+// import {FETCH_CHATS, NEW_CHAT} from '../actions/workspaceActions';
+import * as WorkspaceActions from '../actions/workspaceActions';
+
 
 const placeholderChannels = [
   {
     id: 33,
     name: "channel one",
-    messages: []
+    messages: [],
+    input: "",
   },
   {
     id: 20,
@@ -34,12 +37,14 @@ const placeholderChannels = [
         text: "Here is a message with enters.\nAnother enter.\nOne more enter\n.Last enter.\n",
         timestamp: "06/01 5:09pm",
       },
-    ]
+    ],
+    input: "",
   },
   {
     id: 15,
     name: "really long name channel is here",
-    messages: []
+    messages: [],
+    input: "",
   }
 ];
 
@@ -47,7 +52,8 @@ const placeholderDirectMessages = [
   {
     id: 12,
     name: "me",
-    messages: []
+    messages: [],
+    input: "",
   },
   {
     id: 11,
@@ -77,12 +83,14 @@ const placeholderDirectMessages = [
         text: "Here is a message with enters.\nAnother enter.\nOne more enter\n.Last enter.\n",
         timestamp: "06/01 5:09pm",
       },
-    ]
+    ],
+    input: "",
   },
   {
     id: 2,
     name: "Alex, Willy, Jimmy, Kenneth",
-    messages: []
+    messages: [],
+    input: "",
   }
 ];
 
@@ -130,6 +138,39 @@ const initialState = {
 
 export default function(state=initialState, action) {
   switch(action.type) {
+    case WorkspaceActions.ON_CHANGE:
+      // console.log(action.payload);  
+      // const stateCopy = Object.assign({}, state); // Will this make the program run slow?
+      // const chatCopy = 
+      // stateCopy = { ...state}
+      // stateCopy[action.payload.type][action.payload.index].input = action.payload.inputText;
+      // state.channels[arrayNum].input
+      // const chatCopy = state[action.payload.type];
+      // chatCopy[action.payload.index].input = action.payload.inputText;
+      // console.log(state[action.payload.type]);
+      // const chatArrayCopy = [...state[action.payload.type]];
+      // console.log(chatArrayCopy);
+      // chatArrayCopy[action.payload.index].input = action.payload.inputText;
+      // console.log(chatArrayCopy);
+      return {
+        ...state,
+        [action.payload.type]: [...state[action.payload.type]]
+
+        // [action.payload.type]: chatArrayCopy,
+
+        
+        // [action.payload.type]: state[action.payload.type].map(
+        //     (chat, i) => i === action.payload.index ? {...state[action.payload.type][i], input: action.payload.inputText}
+        //                             : state[action.payload.type][i]
+        // )
+        // [action.payload.type]: chatCopy
+        // [action.payload.type]: [...chatCopy]
+        // [action.payload.type]: {
+        //   ...action.payload.type,
+        //   input: messagesCopy,
+        // },
+        // [action.payload.type][action.payload.index]: action.payload.inputText,
+      }
     default:
       return state;    
   }
