@@ -25,6 +25,7 @@ class SidebarRouting extends Component {
     return (
       <div className="sidebar">
         <CreateChannel active={this.state.createChannelActive} toggleModal={() => {this.toggleModal("createChannelActive")}}/>
+        <CreateDirectMessage active={this.state.createDirectMessageActive} toggleModal={() => {this.toggleModal("createDirectMessageActive")}}/>
         <div className="title-box">
           {/* Replace with this.props.workspace.name && this.props.user.username*/}
           <h3>Workspace Name</h3>
@@ -47,7 +48,10 @@ class SidebarRouting extends Component {
               })
             }
           </ul>
-          <div className="nav-heading">Direct Messages<span className="nav-open-modal">+</span></div>
+          <div className="nav-heading">
+            Direct Messages
+            <span className="nav-open-modal" onClick={() => {this.toggleModal("createChannelActive")}}>+</span>
+          </div>
           <ul className="workspace-chat">
             {
               this.props.directMessages.map((directMessage, index) => {
