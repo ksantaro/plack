@@ -38,7 +38,7 @@ class Chat extends Component {
               return <Message message={message} key={`messageKey${index}`}/>
             })
           }
-          <div className="workspace-messages-end" style={{ float:"left", clear: "both" }}
+          <div className="workspace-messages-end"
               ref={(el) => { this.messagesEnd = el; }}>
           </div>
         </div>
