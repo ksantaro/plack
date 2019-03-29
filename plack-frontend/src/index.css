@@ -684,3 +684,68 @@ input.form-error-input {
   font-size: 16px;
   font-weight: bold;
 }
+
+div.selected-option {
+  display: inline-block;
+  background-color: #4572a0;
+  color: white;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 5px 8px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.selected-option-name {
+  margin-right: 7px;
+}
+
+.selector-input-box {
+  /* border: 1px solid #B7B7B7; */
+  width: 564px;
+  /* height: 0; */
+  border-radius: 6px;
+  margin-top: 20px;
+  margin-right: 20px;
+  display: inline-block;
+    /* outline color: for active #0064ff */
+}
+
+.selector-container .selector-input-box input {
+  margin-top: 0;
+  border: none;
+  margin-right: 0;
+  outline: none;
+}
+
+.selector-container button {
+  float: none;
+  position: absolute;
+  right: 0;
+}
+
+.selector-container {
+  position: relative;
+}
+
+.selector-options {
+  margin-top: 40px;
+  height: 270px;
+  overflow: auto;
+}
+
+.selector-container .selector-option {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 40px;
+  border-top: 1px solid #B7B7B7;
+  margin-right: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.selector-container .selector-option:hover {
+  background-color: #A04570;
+  color: white;
+  border: none;
+}

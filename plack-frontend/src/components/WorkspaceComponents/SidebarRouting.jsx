@@ -50,7 +50,7 @@ class SidebarRouting extends Component {
           </ul>
           <div className="nav-heading">
             Direct Messages
-            <span className="nav-open-modal" onClick={() => {this.toggleModal("createChannelActive")}}>+</span>
+            <span className="nav-open-modal" onClick={() => {this.toggleModal("createDirectMessageActive")}}>+</span>
           </div>
           <ul className="workspace-chat">
             {
