@@ -764,7 +764,7 @@ div.selected-option {
 
   @media only screen and (max-width: 768px) {
     body {
-      background-color: lightblue;
+      /* background-color: lightblue; */
     }
 
     .sidebar {
@@ -789,13 +789,14 @@ div.selected-option {
     .main {
       float: none;
       width: 100%;
+      display: block;
     }
 
     .main h2 {
       border: none;
       background-color: #394750;
       color: #f7f6f6; 
-      font-size: 20px;
+      font-size: 18px;
     }
 
     .hamburger-menu-icon {
@@ -829,5 +830,25 @@ div.selected-option {
     .form-description {
       width: 85%;
       max-width: 412px;
+    }
+
+    /* Workspace Messages */
+    .workspace-input-position {
+      padding-left: 10px;
+      padding-right: 31px;
+      padding-bottom: 5px;
+      padding-top: 5px;
+      border-top: 1px solid #a3a1a1;
+      background-color: #eaeaea;
+    }
+
+    .workspace-input-container input {
+      background-color: #f7f6f6;
+      border-radius: 5px;
+    }
+
+    .workspace-messages {
+      max-height: calc(100% - 121px);
+      top: 50px;
     }
   }

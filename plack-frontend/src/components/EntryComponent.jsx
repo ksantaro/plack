@@ -9,12 +9,12 @@ import CreateWorkspace from './FormComponents/CreateWorkspace';
 // render both of them in different places when the
 // path matches the current URL.
 
-const hamburger = 
-<span className="hamburger-menu-icon">
-  <span className="line"></span>
-  <span className="line"></span>
-  <span className="line"></span>
-</span>
+// const hamburger = 
+// <span className="hamburger-menu-icon">
+//   <span className="line"></span>
+//   <span className="line"></span>
+//   <span className="line"></span>
+// </span>
 
 
 

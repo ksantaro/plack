@@ -19,11 +19,19 @@ class SidebarRouting extends Component {
       [chatType]: !this.state[chatType],
     });
   }
+
+  onClick = (e, params) => {
+    console.log(this.props.onSelect);
+    this.props.onSelect(e, params)
+    this.props.closeSidebar();
+  }
   
   render() {
     // console.log(this.props.channels);
+    console.log(this.props.sidebarOpen ? "sidebar sidebar-modal" : "sidebar");
+
     return (
-      <div className="sidebar">
+      <div className={this.props.sidebarOpen ? "sidebar sidebar-modal" : "sidebar"}>
         <CreateChannel active={this.state.createChannelActive} toggleModal={() => {this.toggleModal("createChannelActive")}}/>
         <CreateDirectMessage active={this.state.createDirectMessageActive} toggleModal={() => {this.toggleModal("createDirectMessageActive")}}/>
         <div className="title-box">
@@ -39,7 +47,8 @@ class SidebarRouting extends Component {
             {
               this.props.channels.map((channel, index) => {
                 return (<li key={`channelLinkKey${channel.id}`}>
-                          <NavLink onClick={(e) => this.props.onSelect(e, {type: "channel", index: index})} to={`/workspace/${this.props.workspace_url}/messages/${channel.id}`} activeClassName="nav-active" exact className={this.props.chatSelected.type === "channel" && this.props.chatSelected.index === index ? "nav-item nav-active" : "nav-item"}>
+                {/* SEEMS LIKE YOU ARE NOT USING THE ON SELECT THING SO RPLACE WITH onClick={this.toggleModal} */}
+                          <NavLink onClick={(e) => this.onClick(e, {type: "channel", index: index})} to={`/workspace/${this.props.workspace_url}/messages/${channel.id}`} activeClassName="nav-active" exact className={this.props.chatSelected.type === "channel" && this.props.chatSelected.index === index ? "nav-item nav-active" : "nav-item"}>
                             <span className="nav-width">
                               # {channel.name}
                             </span>
@@ -56,7 +65,7 @@ class SidebarRouting extends Component {
             {
               this.props.directMessages.map((directMessage, index) => {
                 return (<li key={`directMessageLinkKey${directMessage.id}`}>
-                          <NavLink onClick={(e) => this.props.onSelect(e, {type: "directMessage", index: index})} to={`/workspace/${this.props.workspace_url}/messages/${directMessage.id}`} activeClassName="nav-active" exact className="nav-item">
+                          <NavLink onClick={(e) => this.onClick(e, {type: "directMessage", index: index})} to={`/workspace/${this.props.workspace_url}/messages/${directMessage.id}`} activeClassName="nav-active" exact className="nav-item">
                             <span className="nav-width">
                               @ {directMessage.name}
                             </span>

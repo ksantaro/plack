@@ -20,35 +20,35 @@ import ConnectedInput from './WorkspaceComponents/ConnectedInput'
 class Workspace extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   chatSelected: {
-    //     type: "channel",
-    //     index: 0,
-    //   }
-    // }
+    this.state = {
+      sidebarOpen: false,
+    }
   }
 
-  // onSelect = (e, chat) => {
-  //   this.setState({
-  //     chatSelected: {
-  //       type: chat.type,
-  //       index: chat.index
-  //     }
-  //   })
-  // }
+  toggleModal = () => {
+    console.log("toggling workspace sidebar")
+    this.setState({
+      sidebarOpen: !this.state.sidebarOpen,
+    })
+  }  
 
   render() {
     //combine routes for channels and messages
-    
-      
+    const hamburger = 
+      <span className="hamburger-menu-icon" onClick={this.toggleModal}>
+        <span className="line"></span>
+        <span className="line"></span>
+        <span className="line"></span>
+      </span>
       console.log("workspace render")
 
     return (
       <Router>
         <div className="main-layout">
-          <SidebarRouting workspace_url={this.props.match.params.workspace_url}/>
+          <div className={this.state.sidebarOpen ? "modal-overlay" : "display-none"} onClick={this.toggleModal}></div>
+          <SidebarRouting workspace_url={this.props.match.params.workspace_url} sidebarOpen={this.state.sidebarOpen} closeSidebar={this.toggleModal}/>
           <div className="main">
-            <Chat />
+            <Chat hamburger={hamburger}/>
             <ConnectedInput />
             {/* <ConnectedInput id={this.props.match.params.id} /> */}
             {/* <div>

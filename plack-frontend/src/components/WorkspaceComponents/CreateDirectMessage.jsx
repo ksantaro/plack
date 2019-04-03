@@ -75,8 +75,8 @@ class CreateChannel extends Component {
     const selectedMemberExists = this.state.all_members.find((member) => {
       return member.selected;
     });
-    console.log(selectedMemberExists);
-    console.log(selectedMemberExists === undefined);
+    // console.log(selectedMemberExists);
+    // console.log(selectedMemberExists === undefined);
     if (selectedMemberExists === undefined) {
       return "button-inactive";
     }
@@ -85,9 +85,9 @@ class CreateChannel extends Component {
 
   render() {
     const filteredMembers = this.state.all_members.filter((member) => {
-      console.log(member);
-      console.log(member.name);
-      console.log(member.name.startsWith(this.state.search_text));
+      // console.log(member);
+      // console.log(member.name);
+      // console.log(member.name.startsWith(this.state.search_text));
 
       if (member.name.toUpperCase().startsWith(this.state.search_text.toUpperCase())) {
         return member.name;

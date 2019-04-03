@@ -31,7 +31,7 @@ class Chat extends Component {
     console.log("chat rendered")
     return  (
       <div className="workspace-chat">
-        <h2>{type === "channel" ? "#" : "@"} {chat.name}</h2>
+        <h2>{this.props.hamburger} {type === "channel" ? "#" : "@"} {chat.name}</h2>
         <div className="workspace-messages">
           {
             chat.messages.map((message, index) => {
