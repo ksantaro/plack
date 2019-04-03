@@ -39,6 +39,12 @@ class SidebarRouting extends Component {
           <h3>Workspace Name</h3>
           <h5>username</h5>
         </div>
+          <div className="nav-heading nav-option">
+            Logout
+          </div>
+          {/* <div className="nav-heading nav-option">
+            Copy Workspace URL
+          </div> */}
           <div className="nav-heading">
             Channels
             <span className="nav-open-modal" onClick={() => {this.toggleModal("createChannelActive")}}>+</span>

@@ -22,6 +22,7 @@ class Workspace extends Component {
     super(props);
     this.state = {
       sidebarOpen: false,
+      moreModalOpen: false,
     }
   }
 
@@ -30,7 +31,13 @@ class Workspace extends Component {
     this.setState({
       sidebarOpen: !this.state.sidebarOpen,
     })
-  }  
+  }
+  
+  toggleMoreModal = () => {
+    this.setState({
+      moreModalOpen: !this.state.moreModalOpen,
+    })
+  }
 
   render() {
     //combine routes for channels and messages

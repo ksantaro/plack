@@ -432,6 +432,11 @@ body {
 .sidebar .title-box {
   background-color: #394750;
   padding: 18px 0px;
+  cursor: pointer;
+}
+
+.sidebar .title-box:hover {
+  background-color: #293e4e;
 }
 
 .sidebar .title-box h3 {
@@ -482,6 +487,14 @@ body {
 .nav-heading {
   margin-top: 18px;
   position: relative;
+}
+
+.nav-heading.nav-option {
+  cursor: pointer;
+}
+
+.nav-heading.nav-option:hover {
+  color: #e4e4e4;
 }
 
 .sidebar ul li .nav-item:hover {
