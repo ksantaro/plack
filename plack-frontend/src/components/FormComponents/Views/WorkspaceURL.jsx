@@ -12,9 +12,9 @@ class WorkspaceURL extends Component {
     return (
       <form className="form-container" onSubmit={this.props.onSubmit}>
         <div className="form-description">
-          Enter your team’s workspace url. If your team<br/>
+          Enter your team’s workspace url. If your team
           does not have a workspace, 
-          create one <Link to="/create-workspace">here.</Link>
+          create one <Link to="/u/create-workspace">here.</Link>
         </div>
         <FormInput placeholder="WORKSPACE-URL" name="workspace_url" value={this.props.workspace_url} onChange={this.props.onChange} required error={this.props.errors.workspace_url}/>
         <button>Next</button>

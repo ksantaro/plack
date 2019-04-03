@@ -11,7 +11,7 @@ class SignIn extends Component {
     return (
       <form className="form-container" onSubmit={this.props.onSubmit}>
         <div className="form-description">
-          Enter your username and password for the<br/>
+          Enter your username and password for the
           workspace: <strong>{this.props.workspace_url}</strong>
         </div>
         <FormInput placeholder="USERNAME" name="username" value={this.props.username} onChange={this.props.onChange} required error={this.props.errors.username}/>
