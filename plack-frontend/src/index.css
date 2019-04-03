@@ -851,4 +851,52 @@ div.selected-option {
       max-height: calc(100% - 121px);
       top: 50px;
     }
+
+    /* Modals */
+    .modal-sidebar-create-position {
+      max-width: 700px;
+      width: 80%;
+    }
+
+    .modal-sidebar-create-title {
+      font-size: 30px;
+    }
+
+    .modal-sidebar-create-close {
+      top: 0;
+      font-size: 26px;
+    }
+
+    /* .modal-sidebar-create .form-input {
+      max-width: 550px;
+      width: 98%;
+    }
+
+    .modal-sidebar-create form input {
+      width: inherit;
+    } */
   }
+
+@media only screen and (max-width: 670px) {
+  .modal-sidebar-create form button {
+    display: block;
+    float: none;
+  }
+
+  .modal-sidebar-create .form-input {
+    max-width: 550px;
+    width: 98%;
+  }
+
+  .modal-sidebar-create form input {
+    width: inherit;
+  }
+
+  .selector-container button {
+    position: relative;
+  }
+
+  .modal-sidebar-create .selector-container input {
+    width: 95%;
+  }
+}
