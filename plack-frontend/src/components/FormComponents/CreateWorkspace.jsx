@@ -4,11 +4,16 @@ import WorkspaceURL from './Views/WorkspaceURL';
 import CreateUser from './Views/CreateUser';
 import CreateWorkspaceView from './Views/CreateWorkspaceView';
 
+import { connect } from 'react-redux';
+import {login, getCurrentUser} from '../../actions/userActions';
+import {getWorkspace} from '../../actions/workspaceActions';
+
 class CreateWorkspace extends Component {
   constructor(props) {
     super(props);
     this.state = {
       workspace_url: "",
+      team_name: "",
       username: "",
       email: "",
       password: "",
@@ -44,8 +49,20 @@ class CreateWorkspace extends Component {
   confirmWorkspaceURL = (e) => {
     e.preventDefault();
     // After calling backend to check, if exists change view_number
-    this.setState({
-      view_number: 2,
+    this.props.getWorkspace(this.state.workspace_url).then(() => {
+      console.log(this.props.workspace);
+      if (this.props.workspace !== null) {
+        this.setState({
+          errors: {
+            ...this.state.errors,
+            workspace_url: `the workspace url: "${this.state.workspace_url}" already exist`,
+          }
+        })
+      } else {
+        this.setState({
+          view_number: 2,
+        });
+      }
     });
   }
 
@@ -101,4 +118,19 @@ class CreateWorkspace extends Component {
   }
 }
 
-export default CreateWorkspace;
+const mapStateToProps = state => ({
+  token: state.user.token, //jwt token after login
+  error: state.user.error, //401 error if incorrect login cred
+  userData: state.user.userData,
+  // redirectComponent: state.redirect.redirectComponent,
+  workspace: state.workspace.workspace,
+})
+
+const mapDispatchToProps = dispatch => ({
+  getWorkspace: (workspace_url) => dispatch(getWorkspace(workspace_url)),
+  login: (workspace_url, username, password) => dispatch(login(workspace_url, username, password)),
+  getCurrentUser: (token) => dispatch(getCurrentUser(token)),
+  // setRedirectComponent: (redirectLink) => dispatch(setRedirectComponent(redirectLink)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateWorkspace);

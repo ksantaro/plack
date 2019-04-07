@@ -53,7 +53,12 @@ class Workspace extends Component {
       <Router>
         <div className="main-layout">
           <div className={this.state.sidebarOpen ? "modal-overlay" : "display-none"} onClick={this.toggleModal}></div>
-          <SidebarRouting workspace_url={this.props.match.params.workspace_url} sidebarOpen={this.state.sidebarOpen} closeSidebar={this.toggleModal}/>
+          <SidebarRouting 
+            workspace_url={this.props.match.params.workspace_url} 
+            sidebarOpen={this.state.sidebarOpen} 
+            closeSidebar={this.toggleModal}
+            history={this.props.history}
+          />
           <div className="main">
             <Chat hamburger={hamburger}/>
             <ConnectedInput />

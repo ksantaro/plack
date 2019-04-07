@@ -176,11 +176,18 @@ const initialState = {
     type: "directMessage",
     index: 0,
   },
-  preservedInputs
+  preservedInputs,
+  workspace: null,
 }
 
 export default function(state=initialState, action) {
   switch(action.type) {
+    case WorkspaceActions.GET_WORKSPACE_SUCCESS:
+    console.log(action.payload.workspace);
+      return {
+        ...state,
+        workspace: action.payload.workspace,
+      }
     case WorkspaceActions.ON_SELECT:
       return {
         ...state,
@@ -191,9 +198,6 @@ export default function(state=initialState, action) {
       }
       break;
     case WorkspaceActions.CHANGE_INPUT:
-      console.log(action.payload.id);
-      console.log(action.payload.text);
-      console.log(state['preservedInputs']);
       return {
         ...state,
         preservedInputs: {

@@ -18,7 +18,7 @@ import CreateWorkspace from './FormComponents/CreateWorkspace';
 
 
 
-class MainLayout extends Component {
+class EntryComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,24 +45,26 @@ class MainLayout extends Component {
         path: "/u",
         exact: true,
         sidebar: () => <div>home!</div>,
-        main: () => <Login />,
+        main: () => <Login history={this.props.history}/>,
         name: () => <h2>{hamburger} Login</h2>,
       },
       {
         path: "/u/sign-up",
         exact: true,
         sidebar: () => <div>bubblegum!</div>,
-        main: () => <SignUp />,
+        main: () => <SignUp history={this.props.history}/>,
         name: () => <h2>{hamburger} Sign Up</h2>,
       },
       {
         path: "/u/create-workspace",
         exact: true,
         sidebar: () => <div>shoelaces!</div>,
-        main: () => <CreateWorkspace />,
+        main: () => <CreateWorkspace history={this.props.history}/>,
         name: () => <h2>{hamburger} Create Workspace</h2>,
       }
     ];
+
+    console.log(this.props.history);
 
     return (
       <Router>
@@ -131,4 +133,4 @@ class MainLayout extends Component {
   }
 }
 
-export default MainLayout;
+export default EntryComponent;

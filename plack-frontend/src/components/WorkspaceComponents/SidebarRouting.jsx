@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
+
+import { logout } from "../../actions/userActions";
 import { onSelect, changeInput } from '../../actions/workspaceActions';
 import CreateChannel from '../WorkspaceComponents/CreateChannel';
 import CreateDirectMessage from '../WorkspaceComponents/CreateDirectMessage';
@@ -25,6 +27,11 @@ class SidebarRouting extends Component {
     this.props.onSelect(e, params)
     this.props.closeSidebar();
   }
+
+  logout = () => {
+    this.props.logout();
+    this.props.history.push("/u");
+  }
   
   render() {
     // console.log(this.props.channels);
@@ -39,7 +46,7 @@ class SidebarRouting extends Component {
           <h3>Workspace Name</h3>
           <h5>username</h5>
         </div>
-          <div className="nav-heading nav-option">
+          <div className="nav-heading nav-option" onClick={this.logout}>
             Logout
           </div>
           {/* <div className="nav-heading nav-option">
@@ -97,6 +104,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onSelect: (e, chat) => dispatch(onSelect(e, chat)),
+  logout: () => dispatch(logout()),
   // changeInput: (inputText, index, type) => dispatch(changeInput(inputText, index, type)),
   // login: (workspace_url, email, password) => dispatch(login(workspace_url, email, password)),
   // getCurrentUser: (token) => dispatch(getCurrentUser(token)),

@@ -30,7 +30,7 @@ export const loginError = error => ({
   payload: {error}
 })
 
-export const login = (workspace_url, email, password) => (dispatch, getState) => {
+export const login = (workspace_url, username, password) => (dispatch, getState) => {
   dispatch(logout()); //resets the user state
   dispatch(loginStart());
   return axios({
@@ -38,7 +38,7 @@ export const login = (workspace_url, email, password) => (dispatch, getState) =>
     url: `${apiHost}/users/login`,
     data: {
       workspace_url,
-      email,
+      username,
       password,
     }
   })
@@ -95,6 +95,57 @@ export const getCurrentUser = (token) => (dispatch, getState) => {
       console.log(error);
       if(error.response && error.response.status === 401) {
         dispatch(getCurrentUserError(error.response.data));
+      }
+    }
+  });
+}
+
+/* Create User */
+export const CREATE_USER_START = "CREATE_USER_START";
+export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS";
+export const CREATE_USER_ERROR = "CREATE_USER_ERROR";
+
+export const createUserStart = () => ({
+  type: CREATE_USER_START
+});
+
+export const createUserSuccess = (userData, isAuthenticated) => ({
+  type: CREATE_USER_SUCCESS,
+  payload: {userData, isAuthenticated}
+});
+
+export const createUserError = error => ({
+  type: CREATE_USER_ERROR,
+  payload: {error}
+})
+
+// workspace_url, workspace_name, username, email, password
+
+export const createUser = (workspace, username, email, password) => (dispatch, getState) => {
+  //workspace_url cannot cause an error since it is checked in frontend
+  dispatch(createUserStart());
+  console.log(workspace);
+  return axios({
+    method: 'post',
+    url: `${apiHost}/users/create`,
+    data: {
+      workspace,
+      username,
+      email,
+      password,
+    }
+  })
+  .then((response) => {
+    console.log(response);
+    const {newUser, workspace, token} = response.data;
+    dispatch(loginSuccess(token))
+    // dispatch(login(workspace.workspace_url, newUser.username, newUser.password)) //will need to convert unhash passwords first
+  })
+  .catch((error) => {
+    if (error) {
+      console.log(error);
+      if(error.response && error.response.status === 401) {
+        dispatch(createUserError(error.response.data));
       }
     }
   });

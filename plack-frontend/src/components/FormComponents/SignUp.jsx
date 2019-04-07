@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"; //delete after
 import WorkspaceURL from './Views/WorkspaceURL';
 import CreateUser from './Views/CreateUser';
+import { connect } from 'react-redux';
+import {login, getCurrentUser, createUser} from '../../actions/userActions';
+import {getWorkspace} from '../../actions/workspaceActions';
 
-class Login extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,14 +45,45 @@ class Login extends Component {
   confirmWorkspaceURL = (e) => {
     e.preventDefault();
     // After calling backend to check, if exists change view_number
-    this.setState({
-      view_number: 2,
+    this.props.getWorkspace(this.state.workspace_url).then(() => {
+      console.log(this.props.workspace);
+      if (this.props.workspace === null) {
+        this.setState({
+          errors: {
+            ...this.state.errors,
+            workspace_url: `the workspace url: "${this.state.workspace_url}" does not exist`,
+          }
+        })
+      } else {
+        this.setState({
+          view_number: 2,
+        });
+      }
     });
   }
 
   submitNewUser = (e) => {
     e.preventDefault();
     this.passwordsMatch();
+    this.props.createUser(this.props.workspace, this.state.username, this.state.email, this.state.password).then((res) => {
+      if(this.props.error.length === 0) { // if error does not exist
+        console.log(this.props.token);
+        this.props.getCurrentUser(this.props.token)
+          .then(() => {
+            console.log(this.props.userData);
+            this.props.history.push(`/workspace/${this.props.userData.user_id}/messages/1`); //redirects but perserves the history stack
+            // this.props.setRedirectComponent(`/workspace/${this.props.userData.user_id}`);
+          // this.setRedirect(`/workspace/${this.props.match.params.workspace_id}`)
+          });
+      } else {
+        this.setState({
+          errors: {
+            ...this.state.errors,
+            password: `${this.props.error}`,
+          }
+        })
+      }
+    })
   }
 
   passwordsMatch = () => {
@@ -98,4 +132,20 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+  token: state.user.token, //jwt token after login
+  error: state.user.error, //401 error if incorrect login cred
+  userData: state.user.userData,
+  // redirectComponent: state.redirect.redirectComponent,
+  workspace: state.workspace.workspace,
+})
+
+const mapDispatchToProps = dispatch => ({
+  getWorkspace: (workspace_url) => dispatch(getWorkspace(workspace_url)),
+  login: (workspace_url, username, password) => dispatch(login(workspace_url, username, password)),
+  getCurrentUser: (token) => dispatch(getCurrentUser(token)),
+  createUser: (workspace, username, email, password) => dispatch(createUser(workspace, username, email, password)),
+  // setRedirectComponent: (redirectLink) => dispatch(setRedirectComponent(redirectLink)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

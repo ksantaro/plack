@@ -7,16 +7,19 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash/fp');
 
 const verifyToken = require('./verifyToken');
+const {createUser} = require('./common');
 
 
-var client = require('../postgres.js');
-var currentClient = client.getClient();
+// var client = require('../postgres.js');
+// var currentClient = client.getClient();
 
 // TODO hash passwords after most of the app implementation use bcrypt
 
 function vToken(token) {
 	jwt.verify(token, "SecretJWTKEY1234@@@");
 }
+
+
 
 //Format of token
 // Authorization: Bearer <access_token>
@@ -65,7 +68,7 @@ router.get('/workspace/:workspace_id', function(req, res) {
 // });
 
 router.post('/login', function(req, res) {
-	const { email, password, workspace_url } = req.body;
+	const { username, password, workspace_url } = req.body;
 	console.log(workspace_url);
 	models.Workspace.findAll({
 		where: {
@@ -81,13 +84,13 @@ router.post('/login', function(req, res) {
 				attributes: ['user_id', 'workspace_id', 'username', 'email'],
 				where: {
 					workspace_id: workspace_id,
-					email: email,
-					password: password, //can remove this and validate later //to seperate email error and password error
+					username: username,
+					password: password, //can remove this and validate later //to seperate username error and password error
 				}
 			}).then(function(users) {
 				if (users.length === 0) {
 					// res.json("ERROR: email does not exist or password is incorrect");
-					res.status(401).send('ERROR: email or password is incorrect');
+					res.status(401).send('ERROR: username or password is incorrect');
 				} else {
 					// res.json(users[0]);
 					const user = users[0];
@@ -109,6 +112,15 @@ router.get('/isAuthenticated', verifyToken, function(req,res) {
 		isAuthenticated: true,
 		userData: req.userData
 	});
+});
+
+router.post('/create', (req,res) => {
+	const {workspace, username, email, password} = req.body;
+	console.log(workspace);
+	console.log(username);
+	console.log(email);
+	console.log(password);
+	createUser(workspace, username, email, password, res);
 });
 
 // router.get('/current-user', verifyToken, function(req,res) {

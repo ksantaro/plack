@@ -16,6 +16,7 @@ var client = require('./postgres.js');
 client.connect();		//Establish connection with client
 var currentClient = client.getClient();
 
+var bodyParser = require('body-parser');
 var app = express();
 
 // view engine setup
@@ -40,6 +41,8 @@ app.use(function(req, res, next) {
       next();
     }
 });
+
+// app.use(bodyParser.json());
 
 app.options("/*", function(req, res, next){
 	res.header('Access-Control-Allow-Origin', '*');
