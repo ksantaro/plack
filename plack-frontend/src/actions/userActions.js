@@ -125,6 +125,9 @@ export const createUser = (workspace, username, email, password) => (dispatch, g
   //workspace_url cannot cause an error since it is checked in frontend
   dispatch(createUserStart());
   console.log(workspace);
+  console.log(username);
+  console.log(email);
+  console.log(password);
   return axios({
     method: 'post',
     url: `${apiHost}/users/create`,
@@ -138,14 +141,15 @@ export const createUser = (workspace, username, email, password) => (dispatch, g
   .then((response) => {
     console.log(response);
     const {newUser, workspace, token} = response.data;
+    console.log(token);
     dispatch(loginSuccess(token))
     // dispatch(login(workspace.workspace_url, newUser.username, newUser.password)) //will need to convert unhash passwords first
   })
   .catch((error) => {
     if (error) {
       console.log(error);
-      if(error.response && error.response.status === 401) {
-        dispatch(createUserError(error.response.data));
+      if(error.response && error.response.status === 400) {
+        console.log(error.response);
       }
     }
   });
