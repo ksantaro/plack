@@ -94,6 +94,25 @@ router.post('/login', function(req, res) {
 				} else {
 					// res.json(users[0]);
 					const user = users[0];
+					// Find all Chats with a least one User-Chats where User-Chats.user_id === user_id
+
+					// models.Chat.findAll({
+					// 	include: [{
+					// 		model: models["User-Chats"],
+					// 		where: {
+					// 			user_id: user.user_id //User-Chats.user_id ==  user_id
+					// 			chat_id: Sequelize.col('project.state')
+					// 		} 
+					// 	},
+					// 	// {
+					// 	// 	model: models,
+					// 	// 	where: {}
+					// 	// }
+					// 	]
+					// }).then((Chat) => {
+					// 	console.log(Chat);
+					// })
+					
 					jwt.sign({user},
 					"SecretJWTKEY1234@@@", 
 					{expiresIn: "6h"},

@@ -44,6 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       through: 'Workspace',
       foreignKey: 'workspace_id'
     });
+
+    // User.hasMany(models['User-Chats'])
+
+    User.belongsToMany(models.Chat, {through: 'User-Chats'})
+
   };
   return User;
 };

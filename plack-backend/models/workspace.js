@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Workspace.associate = function(models) {
     // associations can be defined here
+    Workspace.hasMany(models.User)
   };
   return Workspace;
 };

@@ -26,6 +26,18 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Chat.associate = function(models) {
     // associations can be defined here
+    // Chat.belongsTo(models['User-Chats'], {
+    //   through: 'User-Chats',
+    //   foreignKey: 'chat_id'
+    // });
+
+    // Chat.hasOne(models.Channel);
+
+    // Chat.belongsToMany(models['User-Chats'], {
+    //   through: 'User-Chats',
+    //   foreignKey: 'chat_id'
+    // });
+    Chat.belongsToMany(models.User, {through: 'User-Chats'})
   };
   return Chat;
 };

@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Channel.associate = function(models) {
     // associations can be defined here
+    Channel.belongsTo(models.Chat, {
+      through: 'Chat',
+      foreignKey: 'chat_id'
+    });
   };
   return Channel;
 };
