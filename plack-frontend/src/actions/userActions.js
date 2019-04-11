@@ -2,7 +2,16 @@ import axios from 'axios';
 import { purgeStoredState } from 'redux-persist';
 import storage from 'localforage';
 
+import {getWorkspaceSuccess} from './workspaceActions'; 
+
 const apiHost = "http://localhost:3010" //change on development type
+
+/* ClEAR ERROR */
+export const CLEAR_ERROR = "CLEAR_ERROR";
+
+export const clearError = () => (dispatch, getState) => {
+  dispatch({type: CLEAR_ERROR});
+}
 
 /* USER LOGOUT */
 export const USER_LOGOUT = "USER_LOGOUT";
@@ -25,9 +34,9 @@ export const loginSuccess = token => ({
   payload: {token}
 });
 
-export const loginError = error => ({
+export const loginError = (type, message) => ({
   type: LOGIN_ERROR,
-  payload: {error}
+  payload: {error: {type, message}}
 })
 
 export const login = (workspace_url, username, password) => (dispatch, getState) => {
@@ -50,7 +59,8 @@ export const login = (workspace_url, username, password) => (dispatch, getState)
     if (error) {
       // if (specific error) dispatch specificError()
       if(error.response.status === 401) {
-        dispatch(loginError(error.response.data));
+        console.log(error.response.data);
+        dispatch(loginError('password', error.response.data));
       }
     }
   });
@@ -100,7 +110,7 @@ export const getCurrentUser = (token) => (dispatch, getState) => {
   });
 }
 
-/* Create User */
+/* CREATE USER */
 export const CREATE_USER_START = "CREATE_USER_START";
 export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS";
 export const CREATE_USER_ERROR = "CREATE_USER_ERROR";
@@ -119,15 +129,9 @@ export const createUserError = error => ({
   payload: {error}
 })
 
-// workspace_url, workspace_name, username, email, password
-
 export const createUser = (workspace, username, email, password) => (dispatch, getState) => {
   //workspace_url cannot cause an error since it is checked in frontend
   dispatch(createUserStart());
-  console.log(workspace);
-  console.log(username);
-  console.log(email);
-  console.log(password);
   return axios({
     method: 'post',
     url: `${apiHost}/users/create`,
@@ -150,6 +154,72 @@ export const createUser = (workspace, username, email, password) => (dispatch, g
       console.log(error);
       if(error.response && error.response.status === 400) {
         console.log(error.response);
+        if(error.response.data.email) {
+          dispatch(loginError("email", error.response.data.email));
+        } else if (error.response.data.username) {
+          dispatch(loginError("username", error.response.data.username));
+        }
+      }
+    }
+  });
+}
+
+/* CREATE WORKSPACE */
+export const CREATE_WORKSPACE_START = "CREATE_WORKSPACE_START";
+export const CREATE_WORKSPACE_SUCCESS = "CREATE_WORKSPACE_SUCCESS";
+export const CREATE_WORKSPACE_ERROR = "CREATE_WORKSPACE_ERROR";
+
+export const createWorkspaceStart = () => ({
+  type: CREATE_WORKSPACE_START
+});
+
+export const createWorkspaceSuccess = (userData, isAuthenticated) => ({
+  type: CREATE_WORKSPACE_SUCCESS,
+  payload: {userData, isAuthenticated}
+});
+
+export const createWorkspaceError = error => ({
+  type: CREATE_WORKSPACE_ERROR,
+  payload: {error}
+})
+
+//workspace_url, workspace_name, username, email, password
+export const createWorkspace = (workspace_url, workspace_name, username, email, password) => (dispatch, getState) => {
+  //workspace_url cannot cause an error since it is checked in frontend
+  console.log(workspace_url);
+  dispatch(createWorkspaceStart());
+  return axios({
+    method: 'post',
+    url: `${apiHost}/workspaces/create`,
+    data: {
+      workspace_url,
+      workspace_name,
+      username,
+      email,
+      password,
+    }
+  })
+  .then((response) => {
+    console.log(response);
+    const {newUser, workspace, token} = response.data;
+    console.log(token);
+    dispatch(getWorkspaceSuccess(workspace))
+    // .then(() => {
+      // console.log(loginSuccess);
+      dispatch(loginSuccess(token));
+    // });
+    // dispatch(login(workspace.workspace_url, newUser.username, newUser.password)) //will need to convert unhash passwords first
+  })
+  .catch((error) => { //no errors relating to username should occur
+    if (error) {
+      console.log(error);
+      if(error.response && error.response.status === 400) {
+        console.log(error.response);
+        if(error.response.data.email) {
+          dispatch(loginError("email", error.response.data.email));
+        } else if (error.response.data.username) {
+          dispatch(loginError("username", error.response.data.username));
+        }
       }
     }
   });

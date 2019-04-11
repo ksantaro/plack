@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash/fp');
 
 const verifyToken = require('./verifyToken');
-const {createUser, checkIfUserExists} = require('./common');
+const {createUser, checkIfUserExists, createLoginFunction} = require('./common');
 
 
 // var client = require('../postgres.js');
@@ -114,10 +114,7 @@ router.get('/isAuthenticated', verifyToken, function(req,res) {
 	});
 });
 
-router.post('/create', checkIfUserExists, (req,res) => {
-	const {workspace, username, email, password} = req.body;
-	console.log(`USERS 119: ${email} ${username}`)
-	createUser(workspace, username, email, password, res);
+router.post('/create', checkIfUserExists, createUser, createLoginFunction, (req,res) => {
 });
 
 // router.get('/current-user', verifyToken, function(req,res) {

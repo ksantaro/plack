@@ -6,15 +6,18 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 // When creating a user, also log them in
-createLoginFunction = (newUser, newChat, newUserToChat, workspace, res) => {
-    const user = newUser;
-    jwt.sign({user},
-    "SecretJWTKEY1234@@@", 
-    {expiresIn: "6h"},
-    (err, token) => {
-      console.log(`COMMON 15:${token}`);
-      res.json({newUser, newChat, newUserToChat, workspace, token});
-    },)
+createLoginFunction = (req, res, next) => {
+  const {newUser, newChat, newUserToChat, workspace} = req.newData;
+  const user = newUser;
+  jwt.sign({user},
+  "SecretJWTKEY1234@@@", 
+  {expiresIn: "6h"},
+  (err, token) => {
+    console.log(`COMMON 15:${token}`);
+    res.json({newUser, newChat, newUserToChat, workspace, token})
+    // req.newData = {newUser, newChat, newUserToChat, workspace, token};
+    // next();
+  },)
 }
 
 // checkIfUserExists = (username, email, res) => {
@@ -36,11 +39,10 @@ checkIfUserExists = (req, res, next) => {
       username,
     }
   }).then((user1) => {
-    res.json()
     if(user1 !== null) {
       res.status(400).send(
           {
-            username: 'ERROR: password already exsits in this workspace',
+            username: 'ERROR: username already exsits in this workspace',
           }
       );
     } else {
@@ -53,7 +55,7 @@ checkIfUserExists = (req, res, next) => {
         if(user2 !== null) {
           res.status(400).send(
             {
-              email: "ERROR: username already exsits in this workspace",
+              email: "ERROR: email already exsits in this workspace",
             }
         );
         } else {
@@ -65,8 +67,29 @@ checkIfUserExists = (req, res, next) => {
   });
 }
 
-createUser = (workspace, username, email, password, res) => {
-  
+createWorkspace = (req, res, next) => {
+    const {workspace_url, workspace_name, username, email, password} = req.body;
+    console.log(workspace_url)
+    models.Workspace.build({
+      workspace_url,
+      name: workspace_name,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      })
+      .save()
+      .then((newWorkspace) => {
+          req.body.workspace = newWorkspace;
+          next();
+          // createUser(newWorkspace, username, email, password, res);
+      })
+      .catch((error) => {
+          console.log(error);
+          res.json(error);
+      })
+  }
+
+createUser = (req, res, next) => {
+  const {workspace, username, email, password} = req.body;
 	models.User.build({
 		workspace_id: workspace.workspace_id,
 		username,
@@ -95,7 +118,9 @@ createUser = (workspace, username, email, password, res) => {
 			.save()
 			.then((newUserToChat) => {
         console.log(createLoginFunction);
-        createLoginFunction(newUser, newChat, newUserToChat, workspace, res);
+        req.newData = {newUser, newChat, newUserToChat, workspace};
+        next();
+        // createLoginFunction(newUser, newChat, newUserToChat, workspace, res);
 			})
 			.catch((error) => { // Build User-Chat
 				res.json(error);
@@ -111,4 +136,6 @@ createUser = (workspace, username, email, password, res) => {
 module.exports = {
   createUser,
   checkIfUserExists,
+  createWorkspace,
+  createLoginFunction,
 }

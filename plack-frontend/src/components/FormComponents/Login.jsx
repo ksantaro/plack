@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom"; //delet
 import WorkspaceURL from './Views/WorkspaceURL';
 import SignIn from './Views/SignIn';
 import { connect } from 'react-redux';
-import {login, getCurrentUser} from '../../actions/userActions';
+import {login, getCurrentUser, clearError} from '../../actions/userActions';
 import {getWorkspace} from '../../actions/workspaceActions';
 
 class Login extends Component {
@@ -30,6 +30,16 @@ class Login extends Component {
         });
       }
     }
+  }
+
+  resetErrors() {
+    this.setState({
+      errors: {
+        workspace_url: null,
+        username: null,
+        password: null,
+      }
+    })
   }
 
   onChange = (e) => {
@@ -65,7 +75,9 @@ class Login extends Component {
     // console.log(this.state.workspace_url, this.state.username, this.state.password);
     this.props.login(this.state.workspace_url, this.state.username, this.state.password)
       .then(() => {
-        if(this.props.error.length === 0) { // if error does not exist
+        console.log(this.props.error);
+        console.log(Object.keys(this.props.error).length === 0);
+        if(Object.keys(this.props.error).length === 0) { // if error does not exist
           this.props.getCurrentUser(this.props.token)
             .then(() => {
               console.log(this.props.userData);
@@ -77,8 +89,10 @@ class Login extends Component {
           this.setState({
             errors: {
               ...this.state.errors,
-              password: `${this.props.error}`,
+              password: `${this.props.error.message}`,
             }
+          }, () =>{
+            clearError();
           })
         }
       })
@@ -129,6 +143,7 @@ const mapDispatchToProps = dispatch => ({
   getWorkspace: (workspace_url) => dispatch(getWorkspace(workspace_url)),
   login: (workspace_url, username, password) => dispatch(login(workspace_url, username, password)),
   getCurrentUser: (token) => dispatch(getCurrentUser(token)),
+  clearError: () => dispatch(clearError()),
   // setRedirectComponent: (redirectLink) => dispatch(setRedirectComponent(redirectLink)),
 });
 

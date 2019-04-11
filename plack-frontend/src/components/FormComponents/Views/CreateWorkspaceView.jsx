@@ -16,7 +16,7 @@ class CreateWorkspaceView extends Component {
           join an existing team sign up <Link to='/u/sign-up'>here.</Link>
         </div>
         <FormInput placeholder="TEAM NAME" name="team_name" value={this.props.team_name} onChange={this.props.onChange} required error={this.props.errors.team_name}/>
-        <FormInput type="text" placeholder="WORKSPACE-URL (NO SPACES)" name="workspace_url" value={this.props.workspace_url} onChange={this.props.onChange} required error={this.props.errors.workspace_url}/>        
+        <FormInput type="text" placeholder="WORKSPACEURL (NO SPACES)" name="workspace_url" value={this.props.workspace_url} onChange={this.props.onChange} required error={this.props.errors.workspace_url}/>        
         <button onClick={this.props.confirmWorkspaceURL}>Next</button>
       </form>
     );

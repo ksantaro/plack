@@ -5,12 +5,18 @@ import { userInfo } from 'os';
 const initialState = {
   userData: null,
   token: '',
-  error: '',
+  error: {}, //{type, message}
   isAuthenticated: false,
 }
 
 export default function(state=initialState, action) {
   switch(action.type) {
+    //CLEAR ERROR
+    case UserActions.CLEAR_ERROR:
+      return {
+        ...state,
+        error: {},
+      }
     //LOGIN
     case UserActions.USER_LOGOUT:
       return initialState;
@@ -18,14 +24,13 @@ export default function(state=initialState, action) {
       return {
         ...state,
         token: action.payload.token,
-        error: '',
+        error: {},
       };
     case UserActions.LOGIN_ERROR:
       return {
         ...state,
         error: action.payload.error,
       }
-
     //GET CURRENT USER
     case UserActions.GET_CURRENT_USER_SUCCESS:
       return {

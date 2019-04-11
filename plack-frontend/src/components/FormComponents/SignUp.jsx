@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom"; //delet
 import WorkspaceURL from './Views/WorkspaceURL';
 import CreateUser from './Views/CreateUser';
 import { connect } from 'react-redux';
-import {login, getCurrentUser, createUser} from '../../actions/userActions';
+import {login, getCurrentUser, createUser, clearError} from '../../actions/userActions';
 import {getWorkspace} from '../../actions/workspaceActions';
 
 class SignUp extends Component {
@@ -64,25 +64,42 @@ class SignUp extends Component {
 
   submitNewUser = (e) => {
     e.preventDefault();
-    this.passwordsMatch();
-    this.props.createUser(this.props.workspace, this.state.username, this.state.email, this.state.password).then((res) => {
-      if(this.props.error.length === 0) { // if error does not exist
-        console.log(this.props.token);
-        this.props.getCurrentUser(this.props.token)
-          .then(() => {
-            console.log(this.props.userData);
-            this.props.history.push(`/workspace/${this.props.userData.user_id}/messages/1`); //redirects but perserves the history stack
-            // this.props.setRedirectComponent(`/workspace/${this.props.userData.user_id}`);
-          // this.setRedirect(`/workspace/${this.props.match.params.workspace_id}`)
-          });
-      } else {
-        this.setState({
-          errors: {
-            ...this.state.errors,
-            password: `${this.props.error}`,
-          }
-        })
-      }
+    this.resetErrors();
+    if(this.passwordsMatch()) {
+      this.props.createUser(this.props.workspace, this.state.username, this.state.email, this.state.password).then((res) => {
+        if(Object.keys(this.props.error).length === 0) { // if error does not exist
+          console.log(this.props.token);
+          this.props.getCurrentUser(this.props.token)
+            .then(() => {
+              console.log(this.props.userData);
+              this.props.history.push(`/workspace/${this.props.userData.user_id}/messages/1`); //redirects but perserves the history stack
+              // this.props.setRedirectComponent(`/workspace/${this.props.userData.user_id}`);
+            // this.setRedirect(`/workspace/${this.props.match.params.workspace_id}`)
+            });
+        } else {
+          console.log(this.props.error);
+          console.log(this.props.error.type);
+          console.log(this.props.error.message);
+          this.setState({
+            errors: {
+              ...this.state.errors,
+              [this.props.error.type]: `${this.props.error.message}`,
+            }
+          }, () => {console.log(this.state.errors); this.props.clearError()})
+        }
+      })
+    }
+  }
+
+  resetErrors() {
+    this.setState({
+      errors: {
+        workspace_url: null,
+        username: null,
+        email: null,
+        password: null,
+        confirm_password: null,
+      },
     })
   }
 
@@ -93,8 +110,9 @@ class SignUp extends Component {
             ...this.state.errors,
             confirm_password: "The passwords do not match."
           }
-      });
+      }, () => {return false});
     }
+    return true;
   }
 
   render() {
@@ -145,6 +163,7 @@ const mapDispatchToProps = dispatch => ({
   login: (workspace_url, username, password) => dispatch(login(workspace_url, username, password)),
   getCurrentUser: (token) => dispatch(getCurrentUser(token)),
   createUser: (workspace, username, email, password) => dispatch(createUser(workspace, username, email, password)),
+  clearError: () => dispatch(clearError()),
   // setRedirectComponent: (redirectLink) => dispatch(setRedirectComponent(redirectLink)),
 });
 

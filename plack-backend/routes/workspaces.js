@@ -2,7 +2,8 @@ var models  = require('../models');
 var express = require('express');
 var router  = express.Router();
 
-const {createUser} = require('./common');
+// const {createUser, createLoginFunction, createWorkspace} = require('./common');
+const {createWorkspace, createUser, createLoginFunction} = require('./common');
 
 //GET all workspaces
 router.get('/', function(req, res) {
@@ -36,21 +37,7 @@ router.get('/workspace-url/:workspace_url', function(req, res) {
     });
 });
 
-router.post('/create', (req, res) => {
-    const {workspace_url, workspace_name, username, email, password} = req.body;
-    models.Workspace.build({
-        workspace_url,
-        name: workspace_name,
-        createdAt: new Date(),
-		updatedAt: new Date(),
-    })
-    .save()
-    .then((newWorkspace) => {
-        createUser(newWorkspace, username, email, password, res);
-    })
-    .catch((error) => {
-        res.json(error);
-    })
+router.post('/create', createWorkspace, createUser, createLoginFunction, (req,res) => {
 });
 
 module.exports = router;

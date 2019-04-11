@@ -16,7 +16,7 @@ class WorkspaceURL extends Component {
           does not have a workspace, 
           create one <Link to="/u/create-workspace">here.</Link>
         </div>
-        <FormInput placeholder="WORKSPACE-URL" name="workspace_url" value={this.props.workspace_url} onChange={this.props.onChange} required error={this.props.errors.workspace_url}/>
+        <FormInput placeholder="WORKSPACEURL" name="workspace_url" value={this.props.workspace_url} onChange={this.props.onChange} required error={this.props.errors.workspace_url}/>
         <button>Next</button>
       </form>
     );
